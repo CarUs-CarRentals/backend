@@ -1,1 +1,1 @@
-INSERT INTO user (email, login, password) values ('pedroh.zwang@gmail.com', 'pedro.zwang', '1231');
+INSERT INTO user (email, login, password, name, cpf, gender, phone) values ('pedroh.zwang@gmail.com', 'pedro.zwang', '1231', 'Pedro', '11111111111', 'Masculino', '999999999');
