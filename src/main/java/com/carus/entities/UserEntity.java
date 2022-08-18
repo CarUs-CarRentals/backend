@@ -33,4 +33,8 @@ public class UserEntity {
 
     @Column(length = 20, nullable = false)
     private String phone;
+
+    @Column(length = 60)
+    private String gender;
+
 }
