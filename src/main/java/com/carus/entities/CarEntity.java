@@ -1,5 +1,7 @@
 package com.carus.entities;
 
+import com.carus.enums.FuelEnum;
+import com.carus.enums.GearEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,36 +15,38 @@ public class CarEntity {
     private Long id;
 
     @OneToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", columnDefinition = "INT(11)")
     private UserEntity user;
 
     @Column(nullable = false, length = 50)
-    private String marca;
+    private String brand;
 
     @Column(nullable = false, length = 50)
-    private String modelo;
+    private String model;
 
-    @Column(nullable = false, length = 4)
-    private String ano;
-
-    @Column(nullable = false, length = 15)
-    private String cor;
-
-    @Column(nullable = false, length = 10)
-    private String placa;
+    @Column(nullable = false)
+    private Integer year;
 
     @Column(nullable = false, length = 15)
-    private String combustivel;
+    private String color;
 
+    @Column(nullable = false, length = 10)
+    private String plate;
+
+    @Enumerated
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    private FuelEnum fuel;
+
+    @Enumerated
     @Column(nullable = false, length = 15)
-    private String cambio;
+    private GearEnum gearShift;
 
-    @Column(nullable = false, length = 10)
-    private String portas;
+    @Column(nullable = false, columnDefinition = "INT(11)")
+    private Byte doors;
 
-    @Column(nullable = false, length = 10)
-    private String lugares;
+    @Column(nullable = false)
+    private Integer seats;
 
-    @Column(nullable = false, length = 10)
-    private String malas;
+    @Column(nullable = false)
+    private Integer trunk;
 }

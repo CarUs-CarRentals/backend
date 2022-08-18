@@ -1,35 +1,37 @@
 package com.carus.dto;
 
 import com.carus.entities.CarEntity;
+import com.carus.enums.FuelEnum;
+import com.carus.enums.GearEnum;
 import lombok.Data;
 
 @Data
 public class CarDTO {
 
     private Long id;
-    private String marca;
-    private String modelo;
-    private String ano;
-    private String cor;
-    private String placa;
-    private String combustivel;
-    private String cambio;
-    private String portas;
-    private String lugares;
-    private String malas;
+    private String brand;
+    private String model;
+    private Integer year;
+    private String color;
+    private String plate;
+    private FuelEnum fuel;
+    private GearEnum gearShift;
+    private Byte doors;
+    private Integer seats;
+    private Integer trunk;
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
-        this.marca = entity.getMarca();
-        this.modelo = entity.getModelo();
-        this.ano = entity.getAno();
-        this.cor = entity.getCor();
-        this.placa = entity.getPlaca();
-        this.combustivel = entity.getCombustivel();
-        this.cambio = entity.getCambio();
-        this.portas = entity.getPortas();
-        this.lugares = entity.getLugares();
-        this.malas = entity.getMalas();
+        this.brand = entity.getBrand();
+        this.model = entity.getModel();
+        this.year = entity.getYear();
+        this.color = entity.getColor();
+        this.plate = entity.getPlate();
+        this.fuel = entity.getFuel();
+        this.gearShift = entity.getGearShift();
+        this.doors = entity.getDoors();
+        this.seats = entity.getSeats();
+        this.trunk = entity.getTrunk();
     }
 
 }
