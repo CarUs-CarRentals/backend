@@ -10,6 +10,8 @@ public class CarDTO {
 
     private Long id;
     private String brand;
+
+    private CarUserDTO user;
     private String model;
     private Integer year;
     private String color;

@@ -15,7 +15,7 @@ public class CarEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", columnDefinition = "INT(11)")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_user"))
     private UserEntity user;
 
     @Column(nullable = false, length = 50)
