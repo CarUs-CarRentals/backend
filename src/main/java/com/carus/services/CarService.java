@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -20,7 +21,7 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public List<CarDTO> findAll() {
-        return carRepository.findAll().stream().map(entity -> new CarDTO(entity)).toList();
+        return carRepository.findAll().stream().map(entity -> new CarDTO(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

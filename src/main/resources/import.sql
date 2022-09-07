@@ -1,1 +1,1 @@
-INSERT INTO user (email, login, password, first_name, last_name, cpf, phone) values ('pedroh.zwang@gmail.com', 'pedro.zwang', '1231', 'Pedro', 'Zwang', '09999999999', '47994155464');
+INSERT INTO user (email, login, password, first_name, last_name, cpf, phone) values ('pedroh.zwang@gmail.com', 'pedro.zwang', '$2a$10$J.mDzSECU91.DdsYPai1LuAThcIIFpC0V0AQUPPUJS1m7T7SYgt9e', 'Pedro', 'Zwang', '09999999999', '47994155464');
