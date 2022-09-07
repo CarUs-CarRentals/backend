@@ -4,6 +4,7 @@ import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -23,5 +27,11 @@ public class UserService {
     @Transactional
     public UserEntity findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public UserDTO create(UserEntity user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return new UserDTO(userRepository.save(user));
     }
 }
