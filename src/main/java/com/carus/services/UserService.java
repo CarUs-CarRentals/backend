@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,7 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<UserDTO> findAll() {
-        return userRepository.findAll().stream().map(entity -> new UserDTO(entity)).toList();
+        return userRepository.findAll().stream().map(entity -> new UserDTO(entity)).collect(Collectors.toList());
     }
 
     @Transactional
