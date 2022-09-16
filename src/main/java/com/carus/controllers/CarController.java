@@ -15,17 +15,17 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<CarDTO>> findAll() {
         return ResponseEntity.ok(carService.findAll());
     }
 
-    @GetMapping(path = "/{id}") // param na rota
+    @GetMapping(path = "/{id}")
     public ResponseEntity<CarDTO> findById(@PathVariable Long id) { // parametro na url
         return ResponseEntity.ok(carService.findById(id));
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<CarDTO> save(@RequestBody CarDTO dto) {
         return ResponseEntity.ok().body(carService.save(dto));
     }
@@ -36,5 +36,9 @@ public class CarController {
         return ResponseEntity.noContent().build();
     }
 
-    // ?nome=Pedro  @RequestParam
+    @GetMapping()
+    public ResponseEntity<List<CarDTO>> carsByLoggedUser() {
+        return ResponseEntity.ok(carService.getCarsByLoggedUser());
+    }
+
 }

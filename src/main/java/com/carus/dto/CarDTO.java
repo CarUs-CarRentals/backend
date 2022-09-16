@@ -4,9 +4,13 @@ import com.carus.entities.CarEntity;
 import com.carus.enums.FuelEnum;
 import com.carus.enums.GearEnum;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
-public class CarDTO {
+@NoArgsConstructor
+public class CarDTO implements Serializable {
 
     private Long id;
     private String brand;

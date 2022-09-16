@@ -31,7 +31,7 @@ public class CarService {
 
     @Transactional
     public CarDTO save(CarDTO dto) {
-        CarEntity entity = carRepository.save(this.DTOToEntity(dto));
+        CarEntity entity = carRepository.save(this.dtoToEntity(dto));
         return new CarDTO(entity);
     }
 
@@ -40,7 +40,13 @@ public class CarService {
         carRepository.deleteById(id);
     }
 
-    private CarEntity DTOToEntity(CarDTO dto) {
+    @Transactional(readOnly = true)
+    public List<CarDTO> getCarsByLoggedUser() {
+        List<CarEntity> cars = carRepository.findCarsByUserId(userService.getLoggedUser().getId());
+        return cars.stream().map(entity -> new CarDTO(entity)).collect(Collectors.toList());
+    }
+
+    private CarEntity dtoToEntity(CarDTO dto) {
         CarEntity entity = new CarEntity();
         entity.setBrand(dto.getBrand());
         entity.setGearShift(dto.getGearShift());
