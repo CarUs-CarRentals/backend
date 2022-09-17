@@ -1,5 +1,6 @@
 package com.carus.services;
 
+import com.carus.dto.CarUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
@@ -29,9 +30,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(entity -> new UserDTO(entity)).collect(Collectors.toList());
     }
 
-    @Transactional
-    public UserEntity findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public UserDTO findById(Long id) {
+        return new UserDTO(userRepository.findById(id).orElse(new UserEntity()));
+    }
+
+    @Transactional(readOnly = true)
+    public UserEntity findById(CarUserDTO carUserDTO) {
+        return userRepository.findById(carUserDTO.getId()).orElse(new UserEntity());
     }
 
     @Transactional
@@ -56,5 +62,29 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user;
+    }
+
+    @Transactional
+    public UserDTO save(UserDTO dto) {
+        UserEntity entity = userRepository.save(this.DTOToEntity(dto));
+        return new UserDTO(entity);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    private UserEntity DTOToEntity(UserDTO dto) {
+        UserEntity entity = new UserEntity();
+        entity.getLogin();
+        entity.getEmail();
+        entity.getFirstName();
+        entity.getLastName();
+        entity.getCpf();
+        entity.getRg();
+        entity.getPhone();
+        entity.getGender();
+        return entity;
     }
 }

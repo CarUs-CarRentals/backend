@@ -1,6 +1,7 @@
 package com.carus.controllers;
 
 import com.carus.dto.CarDTO;
+import com.carus.entities.CarEntity;
 import com.carus.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +22,16 @@ public class CarController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<CarDTO> findById(@PathVariable Long id) { // parametro na url
+    public ResponseEntity<CarDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(carService.findById(id));
     }
 
     @PostMapping(path = "/create")
     public ResponseEntity<CarDTO> save(@RequestBody CarDTO dto) {
-        return ResponseEntity.ok().body(carService.save(dto));
+        return ResponseEntity.ok(carService.save(dto));
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         carService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -41,4 +42,8 @@ public class CarController {
         return ResponseEntity.ok(carService.getCarsByLoggedUser());
     }
 
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<CarDTO> update(@RequestBody CarDTO dto) {
+        return ResponseEntity.ok(carService.save(dto));
+    }
 }

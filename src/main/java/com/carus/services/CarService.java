@@ -2,6 +2,7 @@ package com.carus.services;
 
 import com.carus.dto.CarDTO;
 import com.carus.entities.CarEntity;
+import com.carus.entities.UserEntity;
 import com.carus.repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ public class CarService {
     @Autowired
     private UserService userService;
 
+    @Transactional
+    public CarDTO create(CarEntity car) {
+        return new CarDTO(carRepository.save(car));
+    }
     @Transactional(readOnly = true)
     public List<CarDTO> findAll() {
         return carRepository.findAll().stream().map(entity -> new CarDTO(entity)).collect(Collectors.toList());
@@ -51,14 +56,15 @@ public class CarService {
         entity.setBrand(dto.getBrand());
         entity.setGearShift(dto.getGearShift());
         entity.setFuel(dto.getFuel());
-        entity.setColor(dto.getColor());
+        entity.setCategory(dto.getCategory());
         entity.setDoors(dto.getDoors());
         entity.setModel(dto.getModel());
         entity.setPlate(dto.getPlate());
-        entity.setUser(userService.findById(dto.getUser().getId()));
+        entity.setUser(userService.findById(dto.getUser()));
         entity.setSeats(dto.getSeats());
-        entity.setTrunk(dto.getTrunk());
         entity.setYear(dto.getYear());
+        entity.setPickupLocation(dto.getPickupLocation());
+        entity.setReturnLocation(dto.getReturnLocation());
 
         return entity;
     }
