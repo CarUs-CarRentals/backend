@@ -7,9 +7,11 @@ import com.carus.enums.GearEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class CarDTO {
+public class CarDTO implements Serializable {
 
     private Long id;
     private String brand;

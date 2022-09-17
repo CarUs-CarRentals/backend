@@ -16,11 +16,7 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    @PostMapping(path = "/create")
-    public ResponseEntity<CarDTO> create(@RequestBody CarEntity newCar) {
-        return ResponseEntity.ok(carService.create(newCar));
-    }
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<CarDTO>> findAll() {
         return ResponseEntity.ok(carService.findAll());
     }
@@ -30,7 +26,7 @@ public class CarController {
         return ResponseEntity.ok(carService.findById(id));
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<CarDTO> save(@RequestBody CarDTO dto) {
         return ResponseEntity.ok(carService.save(dto));
     }
@@ -39,6 +35,11 @@ public class CarController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         carService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CarDTO>> carsByLoggedUser() {
+        return ResponseEntity.ok(carService.getCarsByLoggedUser());
     }
 
     @PutMapping(path = "/{id}")

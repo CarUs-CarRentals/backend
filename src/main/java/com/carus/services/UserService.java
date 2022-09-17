@@ -5,6 +5,8 @@ import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,6 +44,18 @@ public class UserService implements UserDetailsService {
     public UserDTO create(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return new UserDTO(userRepository.save(user));
+    }
+
+    protected UserEntity getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity logged = userRepository.findByLogin(authentication.getPrincipal().toString()).get();
+        return logged;
+    }
+
+    public UserDTO getLoggedUserDTO() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity logged = userRepository.findByLogin(authentication.getPrincipal().toString()).get();
+        return new UserDTO(logged);
     }
 
     @Override
