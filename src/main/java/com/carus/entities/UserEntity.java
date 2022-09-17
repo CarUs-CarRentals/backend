@@ -34,6 +34,9 @@ public class UserEntity implements UserDetails {
     @Column(length = 11, nullable = false)
     private String cpf;
 
+    @Column(length = 8, nullable = false)
+    private String rg;
+
     @Column(length = 20, nullable = false)
     private String phone;
 

@@ -25,4 +25,25 @@ public class UserController {
     public ResponseEntity<UserDTO> create(@RequestBody UserEntity newUser) {
         return ResponseEntity.ok(userService.create(newUser));
     }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> save(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.save(dto));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.save(dto));
+    }
 }

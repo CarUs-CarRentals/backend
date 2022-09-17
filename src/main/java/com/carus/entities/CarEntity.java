@@ -1,5 +1,6 @@
 package com.carus.entities;
 
+import com.carus.enums.CategoryEnum;
 import com.carus.enums.FuelEnum;
 import com.carus.enums.GearEnum;
 import lombok.Data;
@@ -10,12 +11,13 @@ import javax.persistence.*;
 @Table(name = "car")
 @Data
 public class CarEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_user"))
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_car_user"))
     private UserEntity user;
 
     @Column(nullable = false, length = 50)
@@ -26,9 +28,6 @@ public class CarEntity {
 
     @Column(nullable = false)
     private Integer year;
-
-    @Column(nullable = false, length = 15)
-    private String color;
 
     @Column(nullable = false, length = 10)
     private String plate;
@@ -41,6 +40,10 @@ public class CarEntity {
     @Column(nullable = false, length = 15)
     private GearEnum gearShift;
 
+    @Enumerated
+    @Column (nullable = false, length = 12)
+    private CategoryEnum category;
+
     @Column(nullable = false, columnDefinition = "INT(11)")
     private Byte doors;
 
@@ -48,5 +51,8 @@ public class CarEntity {
     private Integer seats;
 
     @Column(nullable = false)
-    private Integer trunk;
+    private String pickupLocation;
+
+    @Column(nullable = false)
+    private String returnLocation;
 }
