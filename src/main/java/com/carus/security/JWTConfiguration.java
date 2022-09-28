@@ -34,8 +34,10 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/login").permitAll()
+        http.csrf().and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "api/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/create").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
