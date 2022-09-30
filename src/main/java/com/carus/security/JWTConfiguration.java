@@ -36,7 +36,7 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "api/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/create").permitAll()
                 .anyRequest().authenticated()
                 .and()
