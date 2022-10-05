@@ -51,14 +51,17 @@ public class CarEntity {
     private GearEnum gearShift;
 
     @Enumerated
-    @Column (nullable = false, length = 12)
+    @Column(nullable = false, length = 12)
     private CategoryEnum category;
 
     @Column(nullable = false, columnDefinition = "INT(11)")
-    private Byte doors;
+    private Integer doors;
 
     @Column(nullable = false)
     private Integer seats;
+
+    @Column
+    private Integer trunk;
 
     @Column(nullable = false)
     private String pickupLocation;
