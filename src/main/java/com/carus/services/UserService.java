@@ -1,9 +1,10 @@
 package com.carus.services;
 
-import com.carus.dto.CarUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
+import com.carus.services.exceptions.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -27,12 +29,15 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     public List<UserDTO> findAll() {
-        return userRepository.findAll().stream().map(entity -> new UserDTO(entity)).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
-        return new UserDTO(userRepository.findById(id).get());
+        return new UserDTO(userRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        }));
     }
 
     @Transactional(readOnly = true)

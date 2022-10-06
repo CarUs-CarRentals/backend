@@ -2,8 +2,9 @@ package com.carus.services;
 
 import com.carus.dto.CarDTO;
 import com.carus.entities.CarEntity;
-import com.carus.entities.UserEntity;
 import com.carus.repositories.CarRepository;
+import com.carus.services.exceptions.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class CarService {
 
     @Autowired
@@ -26,12 +28,15 @@ public class CarService {
     }
     @Transactional(readOnly = true)
     public List<CarDTO> findAll() {
-        return carRepository.findAll().stream().map(entity -> new CarDTO(entity)).collect(Collectors.toList());
+        return carRepository.findAll().stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public CarDTO findById(Long id) {
-        return new CarDTO(carRepository.findById(id).orElse(null));
+        return new CarDTO(carRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        }));
     }
 
     @Transactional
