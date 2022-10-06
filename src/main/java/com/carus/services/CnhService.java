@@ -2,7 +2,10 @@ package com.carus.services;
 
 import com.carus.dto.CnhDTO;
 import com.carus.entities.CnhEntity;
+import com.carus.entities.UserEntity;
 import com.carus.repositories.CnhRepository;
+import com.carus.services.exceptions.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,24 +14,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class CnhService {
 
     @Autowired
     private CnhRepository cnhRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Transactional(readOnly = true)
     public List<CnhDTO> findAll() {
-        return cnhRepository.findAll().stream().map(entity -> new CnhDTO(entity)).collect(Collectors.toList());
+        return cnhRepository.findAll().stream().map(CnhDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public CnhDTO findById(Long id) {
-        return new CnhDTO(cnhRepository.findById(id).orElse(null));
+        return new CnhDTO(cnhRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        }));
     }
 
     @Transactional
     public CnhDTO save(CnhDTO dto) {
-        CnhEntity entity = cnhRepository.save(this.DTOToEntity(dto));
+        CnhEntity entity = cnhRepository.save(this.dtoToEntity(dto));
         return new CnhDTO(entity);
     }
 
@@ -37,9 +47,11 @@ public class CnhService {
         cnhRepository.deleteById(id);
     }
 
-    private CnhEntity DTOToEntity(CnhDTO dto) {
+    private CnhEntity dtoToEntity(CnhDTO dto) {
+        UserEntity user = userService.findEntityById(dto.getUserId());
         CnhEntity entity = new CnhEntity();
         entity.setRg(dto.getRg());
+        entity.setUser(user);
         entity.setRegisterNumber((dto.getRegisterNumber()));
         entity.setCnhNumber(dto.getCnhNumber());
         entity.setBirthDate(dto.getBirthDate());

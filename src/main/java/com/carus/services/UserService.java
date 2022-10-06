@@ -40,12 +40,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).get();
     }
 
-
-    @Transactional(readOnly = true)
-    public UserEntity findById(CarUserDTO carUserDTO) {
-        return userRepository.findById(carUserDTO.getId()).orElse(new UserEntity());
-    }
-
     @Transactional
     public UserDTO create(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
