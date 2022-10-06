@@ -49,7 +49,7 @@ public class CarService {
     @Transactional(readOnly = true)
     public List<CarDTO> getCarsByLoggedUser() {
         List<CarEntity> cars = carRepository.findCarsByUserId(userService.getLoggedUser().getId());
-        return cars.stream().map(entity -> new CarDTO(entity)).collect(Collectors.toList());
+        return cars.stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
     private CarEntity dtoToEntity(CarDTO dto) {

@@ -34,15 +34,15 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
-        return new UserDTO(userRepository.findById(id).orElseThrow(() -> {
-            log.error("Entity with id {} not found", id);
-            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
-        }));
+        return new UserDTO(this.findEntityById(id));
     }
 
     @Transactional(readOnly = true)
     public UserEntity findEntityById(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        });
     }
 
     @Transactional

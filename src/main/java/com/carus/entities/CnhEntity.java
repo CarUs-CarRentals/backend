@@ -26,7 +26,7 @@ public class CnhEntity {
     @Column(nullable = false, length = 11)
     private String registerNumber;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 10, unique = true)
     private String cnhNumber;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
