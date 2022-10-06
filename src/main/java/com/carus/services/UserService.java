@@ -36,6 +36,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
+    public UserEntity findEntityById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    @Transactional(readOnly = true)
     public UserEntity findById(CarUserDTO carUserDTO) {
         return userRepository.findById(carUserDTO.getId()).orElse(new UserEntity());
     }
