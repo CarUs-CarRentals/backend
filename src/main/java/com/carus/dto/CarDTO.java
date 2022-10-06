@@ -1,9 +1,9 @@
 package com.carus.dto;
 
 import com.carus.entities.CarEntity;
-import com.carus.enums.CategoryEnum;
-import com.carus.enums.FuelEnum;
-import com.carus.enums.GearEnum;
+import com.carus.enums.ECategory;
+import com.carus.enums.EGear;
+import com.carus.enums.EFuel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,9 +19,9 @@ public class CarDTO implements Serializable {
     private String model;
     private Integer year;
     private String plate;
-    private FuelEnum fuel;
-    private GearEnum gearShift;
-    private CategoryEnum category;
+    private EFuel fuel;
+    private EGear gearShift;
+    private ECategory category;
     private Integer doors;
     private Integer seats;
     private Integer trunk;

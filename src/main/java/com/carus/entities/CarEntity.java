@@ -1,8 +1,8 @@
 package com.carus.entities;
 
-import com.carus.enums.CategoryEnum;
-import com.carus.enums.FuelEnum;
-import com.carus.enums.GearEnum;
+import com.carus.enums.ECategory;
+import com.carus.enums.EFuel;
+import com.carus.enums.EGear;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -44,15 +44,15 @@ public class CarEntity {
 
     @Enumerated
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    private FuelEnum fuel;
+    private EFuel fuel;
 
     @Enumerated
     @Column(nullable = false, length = 15)
-    private GearEnum gearShift;
+    private EGear gearShift;
 
     @Enumerated
     @Column(nullable = false, length = 12)
-    private CategoryEnum category;
+    private ECategory category;
 
     @Column(nullable = false, columnDefinition = "INT(11)")
     private Integer doors;

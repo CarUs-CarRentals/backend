@@ -1,7 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.CnhEntity;
-import com.carus.enums.StateEnum;
+import com.carus.enums.EState;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class CnhDTO {
     private LocalDate expirationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    private StateEnum stateEnum;
+    private EState state;
 
     public CnhDTO(CnhEntity entity) {
         this.id = entity.getId();
@@ -33,7 +33,7 @@ public class CnhDTO {
         this.cnhNumber = entity.getCnhNumber();
         this.expirationDate = entity.getExpirationDate();
         this.birthDate = entity.getBirthDate();
-        this.stateEnum = entity.getStateEnum();
+        this.state = entity.getState();
     }
 
 }

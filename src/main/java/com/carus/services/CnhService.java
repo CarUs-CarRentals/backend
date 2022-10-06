@@ -65,7 +65,7 @@ public class CnhService {
         entity.setRegisterNumber((dto.getRegisterNumber()));
         entity.setCnhNumber(dto.getCnhNumber());
         entity.setBirthDate(dto.getBirthDate());
-        entity.setStateEnum(dto.getStateEnum());
+        entity.setState(dto.getState());
         entity.setExpirationDate(dto.getExpirationDate());
 
         return entity;

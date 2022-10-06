@@ -1,6 +1,6 @@
 package com.carus.enums;
 
-public enum StateEnum {
+public enum EState {
     ACRE,
     ALAGOAS,
     AMAPA,
