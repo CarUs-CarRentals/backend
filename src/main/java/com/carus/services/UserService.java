@@ -32,17 +32,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
-        return new UserDTO(userRepository.findById(id).orElse(new UserEntity()));
+        return new UserDTO(userRepository.findById(id).get());
     }
 
     @Transactional(readOnly = true)
     public UserEntity findEntityById(Long id) {
         return userRepository.findById(id).get();
-    }
-
-    @Transactional(readOnly = true)
-    public UserEntity findById(CarUserDTO carUserDTO) {
-        return userRepository.findById(carUserDTO.getId()).orElse(new UserEntity());
     }
 
     @Transactional
@@ -71,7 +66,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserDTO save(UserDTO dto) {
-        UserEntity entity = userRepository.save(this.DTOToEntity(dto));
+        UserEntity entity = userRepository.save(this.dtoToEntity(dto));
         return new UserDTO(entity);
     }
 
@@ -80,16 +75,16 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    private UserEntity DTOToEntity(UserDTO dto) {
+    public UserEntity dtoToEntity(UserDTO dto) {
         UserEntity entity = new UserEntity();
-        entity.getLogin();
-        entity.getEmail();
-        entity.getFirstName();
-        entity.getLastName();
-        entity.getCpf();
-        entity.getRg();
-        entity.getPhone();
-        entity.getGender();
+        entity.setId(dto.getId());
+        entity.setEmail(dto.getEmail());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setCpf(dto.getCpf());
+        entity.setRg(dto.getRg());
+        entity.setPhone(dto.getPhone());
+        entity.setGender(dto.getGender());
         return entity;
     }
 }

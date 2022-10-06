@@ -60,7 +60,7 @@ public class CarService {
         entity.setDoors(dto.getDoors());
         entity.setModel(dto.getModel());
         entity.setPlate(dto.getPlate());
-        entity.setUser(userService.findById(dto.getUser()));
+        entity.setUser(userService.findEntityById(dto.getUser()));
         entity.setSeats(dto.getSeats());
         entity.setYear(dto.getYear());
         entity.setPickupLocation(dto.getPickupLocation());
