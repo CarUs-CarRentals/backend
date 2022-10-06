@@ -5,8 +5,10 @@ import com.carus.entities.CnhEntity;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.CnhRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
+import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +46,15 @@ public class CnhService {
 
     @Transactional
     public void deleteById(Long id) {
-        cnhRepository.deleteById(id);
+        try {
+            cnhRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            log.error("Entity with id {} not found", id);
+            throw new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw new InternalServerErrorException("An internal server error has occurred, please try again later");
+        }
     }
 
     private CnhEntity dtoToEntity(CnhDTO dto) {

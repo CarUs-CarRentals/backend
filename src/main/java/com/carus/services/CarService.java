@@ -22,10 +22,6 @@ public class CarService {
     @Autowired
     private UserService userService;
 
-    @Transactional
-    public CarDTO create(CarEntity car) {
-        return new CarDTO(carRepository.save(car));
-    }
     @Transactional(readOnly = true)
     public List<CarDTO> findAll() {
         return carRepository.findAll().stream().map(CarDTO::new).collect(Collectors.toList());

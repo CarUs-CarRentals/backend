@@ -1,8 +1,8 @@
 package com.carus.services.exceptions;
 
-public class InternalServerError extends RuntimeException {
+public class InternalServerErrorException extends RuntimeException {
 
-    public InternalServerError(String message) {
+    public InternalServerErrorException(String message) {
         super(message);
     }
 }
