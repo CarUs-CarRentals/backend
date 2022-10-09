@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
 
     private Long id;
-    private String username;
+    private String login;
     private String email;
     private String firstName;
     private String lastName;
@@ -23,7 +23,7 @@ public class UserDTO {
 
     public UserDTO(UserEntity entity) {
         this.id = entity.getId();
-        this.username = entity.getLogin();
+        this.login = entity.getLogin();
         this.email = entity.getEmail();
         this.firstName = entity.getFirstName();
         this.lastName = entity.getLastName();
