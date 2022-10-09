@@ -31,13 +31,13 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(length = 11, nullable = false)
+    @Column(length = 11)
     private String cpf;
 
-    @Column(length = 8, nullable = false)
+    @Column(length = 8)
     private String rg;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String phone;
 
     @Column(length = 60)
