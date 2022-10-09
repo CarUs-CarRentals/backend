@@ -1,5 +1,6 @@
 package com.carus.services;
 
+import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
@@ -46,9 +47,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDTO create(UserEntity user) {
+    public UserDTO create(RegisterUserDTO user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return new UserDTO(userRepository.save(user));
+        UserEntity entity = registerDtoToEntity(user);
+        return new UserDTO(userRepository.save(entity));
     }
 
     protected UserEntity getLoggedUser() {
@@ -90,6 +92,17 @@ public class UserService implements UserDetailsService {
         entity.setRg(dto.getRg());
         entity.setPhone(dto.getPhone());
         entity.setGender(dto.getGender());
+        return entity;
+    }
+
+    public UserEntity registerDtoToEntity(RegisterUserDTO dto) {
+        UserEntity entity = new UserEntity();
+        entity.setId(dto.getId());
+        entity.setLogin(dto.getLogin());
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
         return entity;
     }
 }
