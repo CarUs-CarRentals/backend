@@ -1,9 +1,11 @@
 package com.carus.entities;
 
-import com.carus.enums.StateEnum;
+import com.carus.enums.EState;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cnh")
@@ -24,16 +26,18 @@ public class CnhEntity {
     @Column(nullable = false, length = 11)
     private String registerNumber;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 10, unique = true)
     private String cnhNumber;
 
-    @Column(nullable = false, length = 10)
-    private String expirationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(nullable = false, columnDefinition = "DATE")
+    private LocalDate expirationDate;
 
-    @Column(nullable = false, length = 10)
-    private String birthDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(nullable = false, columnDefinition = "DATE")
+    private LocalDate birthDate;
 
     @Enumerated
     @Column(nullable = false)
-    private StateEnum stateEnum;
+    private EState state;
 }

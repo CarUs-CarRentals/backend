@@ -1,9 +1,10 @@
 package com.carus.services;
 
-import com.carus.dto.CarUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
+import com.carus.services.exceptions.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -27,17 +29,20 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     public List<UserDTO> findAll() {
-        return userRepository.findAll().stream().map(entity -> new UserDTO(entity)).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
-        return new UserDTO(userRepository.findById(id).orElse(new UserEntity()));
+        return new UserDTO(this.findEntityById(id));
     }
 
     @Transactional(readOnly = true)
-    public UserEntity findById(CarUserDTO carUserDTO) {
-        return userRepository.findById(carUserDTO.getId()).orElse(new UserEntity());
+    public UserEntity findEntityById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        });
     }
 
     @Transactional
@@ -66,7 +71,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserDTO save(UserDTO dto) {
-        UserEntity entity = userRepository.save(this.DTOToEntity(dto));
+        UserEntity entity = userRepository.save(this.dtoToEntity(dto));
         return new UserDTO(entity);
     }
 
@@ -75,16 +80,16 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    private UserEntity DTOToEntity(UserDTO dto) {
+    public UserEntity dtoToEntity(UserDTO dto) {
         UserEntity entity = new UserEntity();
-        entity.getLogin();
-        entity.getEmail();
-        entity.getFirstName();
-        entity.getLastName();
-        entity.getCpf();
-        entity.getRg();
-        entity.getPhone();
-        entity.getGender();
+        entity.setId(dto.getId());
+        entity.setEmail(dto.getEmail());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setCpf(dto.getCpf());
+        entity.setRg(dto.getRg());
+        entity.setPhone(dto.getPhone());
+        entity.setGender(dto.getGender());
         return entity;
     }
 }

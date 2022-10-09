@@ -20,7 +20,7 @@ public class CnhController {
         return ResponseEntity.ok(cnhService.findAll());
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<CnhDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(cnhService.findById(id));
     }
@@ -30,14 +30,14 @@ public class CnhController {
         return ResponseEntity.ok(cnhService.save(dto));
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         cnhService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<CnhDTO> update(@RequestBody CnhDTO dto) {
-        return ResponseEntity.ok(cnhService.save(dto));
+        return ResponseEntity.ok(cnhService.update(dto));
     }
 }

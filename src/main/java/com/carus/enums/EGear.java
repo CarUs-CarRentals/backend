@@ -1,6 +1,6 @@
 package com.carus.enums;
 
-public enum GearEnum {
+public enum EGear {
     MANUAL,
     AUTOMATIC
 }

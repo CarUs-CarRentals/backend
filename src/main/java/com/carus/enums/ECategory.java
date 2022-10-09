@@ -1,6 +1,6 @@
 package com.carus.enums;
 
-public enum CategoryEnum {
+public enum ECategory {
     SUV,
     SEDAN,
     HATCHBACK,
