@@ -1,6 +1,6 @@
 package com.carus.entities;
 
-import com.carus.enums.StateEnum;
+import com.carus.enums.EState;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -26,7 +26,7 @@ public class CnhEntity {
     @Column(nullable = false, length = 11)
     private String registerNumber;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 10, unique = true)
     private String cnhNumber;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -39,5 +39,5 @@ public class CnhEntity {
 
     @Enumerated
     @Column(nullable = false)
-    private StateEnum stateEnum;
+    private EState state;
 }

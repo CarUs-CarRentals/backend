@@ -38,6 +38,6 @@ public class CnhController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<CnhDTO> update(@RequestBody CnhDTO dto) {
-        return ResponseEntity.ok(cnhService.save(dto));
+        return ResponseEntity.ok(cnhService.update(dto));
     }
 }

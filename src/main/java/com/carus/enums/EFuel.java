@@ -1,6 +1,6 @@
 package com.carus.enums;
 
-public enum FuelEnum {
+public enum EFuel {
     GASOLINE,
     ALCOHOL,
     DIESEL,
