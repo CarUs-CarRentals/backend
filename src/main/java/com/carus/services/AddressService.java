@@ -16,6 +16,9 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Transactional
     public AddressDTO create(AddressEntity address) {
         return new AddressDTO(addressRepository.save(address));
@@ -38,12 +41,20 @@ public class AddressService {
     }
 
     @Transactional
+    public AddressDTO update(AddressDTO dto, Long id) {
+        AddressEntity updated = this.DTOToEntity(dto);
+        updated.setId(id);
+        return new AddressDTO(addressRepository.save(updated));
+    }
+
+    @Transactional
     public void deleteById(Long id) {
         addressRepository.deleteById(id);
     }
 
     private AddressEntity DTOToEntity(AddressDTO dto) {
         AddressEntity entity = new AddressEntity();
+        entity.setUser(userService.findEntityById(dto.getUser()));
         entity.setCep(dto.getCep());
         entity.setState(dto.getState());
         entity.setCity(dto.getCity());

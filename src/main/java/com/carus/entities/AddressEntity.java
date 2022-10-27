@@ -1,5 +1,6 @@
 package com.carus.entities;
 
+import com.carus.enums.EState;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,8 +21,9 @@ public class AddressEntity {
     @Column(nullable = false, length = 15)
     private String cep;
 
-    @Column(nullable = false, length = 20)
-    private String state;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EState state;
 
     @Column(nullable = false, length = 50)
     private String city;

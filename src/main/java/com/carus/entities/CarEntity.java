@@ -5,16 +5,7 @@ import com.carus.enums.EFuel;
 import com.carus.enums.EGear;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -42,15 +33,15 @@ public class CarEntity {
     @Column(nullable = false, length = 10)
     private String plate;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private EFuel fuel;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private EGear gearShift;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 12)
     private ECategory category;
 
