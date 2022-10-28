@@ -3,14 +3,21 @@ package com.carus.services;
 import com.carus.dto.AddressDTO;
 import com.carus.entities.AddressEntity;
 import com.carus.repositories.AddressRepository;
+import com.carus.services.exceptions.EntityAlreadyExistsException;
+import com.carus.services.exceptions.EntityNotFoundException;
+import com.carus.services.exceptions.InternalServerErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class AddressService {
 
     @Autowired
@@ -25,34 +32,54 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
+    public AddressDTO findById(Long id) {return new AddressDTO(this.findEntityById(id));
+    }
+
+    @Transactional(readOnly = true)
     public List<AddressDTO> findAll() {
         return addressRepository.findAll().stream().map(entity -> new AddressDTO(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public AddressDTO findById(Long id) {
-        return new AddressDTO(addressRepository.findById(id).orElse(null));
+    public AddressEntity findEntityById(Long id) {
+        return addressRepository.findById(id).orElseThrow(() -> {
+            log.error("Entity with id {} not found", id);
+            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        });
     }
 
     @Transactional
     public AddressDTO save(AddressDTO dto) {
-        AddressEntity entity = addressRepository.save(this.DTOToEntity(dto));
-        return new AddressDTO(entity);
+        AddressEntity entity = this.dtoToEntity(dto);
+        try {
+            entity = addressRepository.save(entity);
+            return new AddressDTO(entity);
+        } catch (DataIntegrityViolationException ex) {
+            throw new EntityAlreadyExistsException("Entity already exists");
+        }
     }
 
     @Transactional
     public AddressDTO update(AddressDTO dto, Long id) {
-        AddressEntity updated = this.DTOToEntity(dto);
+        AddressEntity updated = this.dtoToEntity(dto);
         updated.setId(id);
         return new AddressDTO(addressRepository.save(updated));
     }
 
     @Transactional
     public void deleteById(Long id) {
-        addressRepository.deleteById(id);
+        try {
+            addressRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            log.error("Entity with id {} not found", id);
+            throw new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw new InternalServerErrorException("An internal server error has occurred, please try again later");
+        }
     }
 
-    private AddressEntity DTOToEntity(AddressDTO dto) {
+    private AddressEntity dtoToEntity(AddressDTO dto) {
         AddressEntity entity = new AddressEntity();
         entity.setUser(userService.findEntityById(dto.getUser()));
         entity.setCep(dto.getCep());

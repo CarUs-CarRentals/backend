@@ -26,7 +26,7 @@ public class AddressController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AddressDTO> findById(@PathVariable Long id) {return ResponseEntity.ok(addressService.findById(id));
+    public ResponseEntity<AddressDTO> findById(@PathVariable Long id) { return ResponseEntity.ok(addressService.findById(id));
     }
 
     @DeleteMapping(value = "/{id}")
