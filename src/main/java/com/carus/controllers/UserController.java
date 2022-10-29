@@ -1,5 +1,6 @@
 package com.carus.controllers;
 
+import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.services.UserService;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<UserDTO> create(@RequestBody UserEntity newUser) {
+    public ResponseEntity<UserDTO> create(@RequestBody RegisterUserDTO newUser) {
         return ResponseEntity.ok(userService.create(newUser));
     }
 

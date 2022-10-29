@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import javax.persistence.EnumType;
 
 @Entity
 @Table(name = "car")
@@ -42,15 +42,15 @@ public class CarEntity {
     @Column(nullable = false, length = 10)
     private String plate;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private EFuel fuel;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private EGear gearShift;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 12)
     private ECategory category;
 

@@ -37,7 +37,7 @@ public class CnhEntity {
     @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate birthDate;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EState state;
 }
