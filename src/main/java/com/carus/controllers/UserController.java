@@ -2,6 +2,7 @@ package com.carus.controllers;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.carus.config.AuthenticationConfig;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
@@ -26,8 +27,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-//    @Value("${authentication.password}")
-    public String TOKEN_PASSWORD = "fca54529-840a-4ac4-b1de-03cd4a14b687";
+    @Autowired
+    private AuthenticationConfig authenticationConfig;
 
     @Autowired
     private UserService userService;
@@ -79,7 +80,7 @@ public class UserController {
         }
 
         String refreshToken = attribute.replace(attPrefix, "");
-        String username = JWT.require(Algorithm.HMAC512(TOKEN_PASSWORD))
+        String username = JWT.require(Algorithm.HMAC512(authenticationConfig.getTokenPassword()))
                 .build()
                 .verify(refreshToken)
                 .getSubject();
@@ -89,7 +90,7 @@ public class UserController {
         String newToken = JWT.create()
                 .withSubject(user.getLogin())
                 .withExpiresAt(new Date(currentMili + 10_000))
-                .sign(Algorithm.HMAC512(TOKEN_PASSWORD));
+                .sign(Algorithm.HMAC512(authenticationConfig.getTokenPassword()));
 
         return ResponseEntity.ok(newToken);
     }
