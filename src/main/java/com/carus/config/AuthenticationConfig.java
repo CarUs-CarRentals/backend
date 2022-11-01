@@ -10,4 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class AuthenticationConfig {
 
     private String tokenPassword;
+    private int tokenExpiration;
+    private String tokenRequestHeader;
+    private String tokenPrefix;
 }

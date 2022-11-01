@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class JWTValidationToken extends BasicAuthenticationFilter {
 
-    public static final String HEADER_ATTRIBUTE = "Authorization";
-    public static final String ATTRIBUTE_PREFIX = "Bearer ";
     private final AuthenticationConfig config;
 
     public JWTValidationToken(AuthenticationManager authenticationManager, AuthenticationConfig config) {
@@ -29,14 +27,14 @@ public class JWTValidationToken extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        String attribute = request.getHeader(HEADER_ATTRIBUTE);
+        String attribute = request.getHeader(config.getTokenRequestHeader());
 
-        if (attribute == null || !attribute.startsWith(ATTRIBUTE_PREFIX)) {
+        if (attribute == null || !attribute.startsWith(config.getTokenPrefix())) {
             chain.doFilter(request, response);
             return;
         }
 
-        String token = attribute.replace(ATTRIBUTE_PREFIX, "");
+        String token = attribute.replace(config.getTokenPrefix(), "");
         UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken(token);
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

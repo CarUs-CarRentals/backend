@@ -23,9 +23,6 @@ import java.util.Map;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-
-    public static final int TOKEN_EXPIRATION = 10_000;
-
     private final AuthenticationManager authenticationManager;
     private final AuthenticationConfig config;
 
@@ -56,19 +53,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create()
                 .withSubject(user.getLogin())
-                .withExpiresAt(new Date(currentMili + TOKEN_EXPIRATION))
-                .sign(Algorithm.HMAC512(this.config.getTokenPassword()));
+                .withExpiresAt(new Date(currentMili + config.getTokenExpiration()))
+                .sign(Algorithm.HMAC512(config.getTokenPassword()));
 
         String refreshToken = JWT.create()
                 .withSubject(user.getLogin())
-                .withExpiresAt(new Date(currentMili + 900_000_000 * TOKEN_EXPIRATION))
-                .sign(Algorithm.HMAC512(this.config.getTokenPassword()));
+                .withExpiresAt(new Date(currentMili + 900_000_000 * config.getTokenExpiration()))
+                .sign(Algorithm.HMAC512(config.getTokenPassword()));
 
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
-        data.put("tokenExpiration", currentMili + TOKEN_EXPIRATION);
+        data.put("tokenExpiration", currentMili + config.getTokenExpiration());
         data.put("refreshToken", refreshToken);
-        data.put("refreshTokenExpiration", currentMili + 2 * TOKEN_EXPIRATION);
+        data.put("refreshTokenExpiration", currentMili + 2 * config.getTokenExpiration());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), data);
