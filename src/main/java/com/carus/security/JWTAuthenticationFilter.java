@@ -2,8 +2,10 @@ package com.carus.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.carus.config.AuthenticationConfig;
 import com.carus.entities.UserEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,18 +18,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 
-    public static final int TOKEN_EXPIRATION = 900_000;
-
-    public static final String TOKEN_PASSWORD = "fca54529-840a-4ac4-b1de-03cd4a14b687";
+    public static final int TOKEN_EXPIRATION = 10_000;
 
     private final AuthenticationManager authenticationManager;
+    private final AuthenticationConfig config;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationConfig config) {
         this.authenticationManager = authenticationManager;
+        this.config = config;
 
         setFilterProcessesUrl("/api/login");
     }
@@ -44,15 +48,29 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
+            throws IOException, ServletException {
         UserEntity user = (UserEntity) authResult.getPrincipal();
+
+        long currentMili = System.currentTimeMillis();
 
         String token = JWT.create()
                 .withSubject(user.getLogin())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION))
-                .sign(Algorithm.HMAC512(TOKEN_PASSWORD));
+                .withExpiresAt(new Date(currentMili + TOKEN_EXPIRATION))
+                .sign(Algorithm.HMAC512(this.config.getTokenPassword()));
 
-        response.getWriter().write(token);
-        response.getWriter().flush();
+        String refreshToken = JWT.create()
+                .withSubject(user.getLogin())
+                .withExpiresAt(new Date(currentMili + 900_000_000 * TOKEN_EXPIRATION))
+                .sign(Algorithm.HMAC512(this.config.getTokenPassword()));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        data.put("tokenExpiration", currentMili + TOKEN_EXPIRATION);
+        data.put("refreshToken", refreshToken);
+        data.put("refreshTokenExpiration", currentMili + 2 * TOKEN_EXPIRATION);
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), data);
     }
 }

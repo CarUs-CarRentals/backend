@@ -2,6 +2,7 @@ package com.carus.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.carus.config.AuthenticationConfig;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,9 +19,11 @@ public class JWTValidationToken extends BasicAuthenticationFilter {
 
     public static final String HEADER_ATTRIBUTE = "Authorization";
     public static final String ATTRIBUTE_PREFIX = "Bearer ";
+    private final AuthenticationConfig config;
 
-    public JWTValidationToken(AuthenticationManager authenticationManager) {
+    public JWTValidationToken(AuthenticationManager authenticationManager, AuthenticationConfig config) {
         super(authenticationManager);
+        this.config = config;
     }
 
     @Override
@@ -28,15 +31,11 @@ public class JWTValidationToken extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
         String attribute = request.getHeader(HEADER_ATTRIBUTE);
 
-        if (attribute == null) {
+        if (attribute == null || !attribute.startsWith(ATTRIBUTE_PREFIX)) {
             chain.doFilter(request, response);
             return;
         }
 
-        if (!attribute.startsWith(ATTRIBUTE_PREFIX)) {
-            chain.doFilter(request, response);
-            return;
-        }
         String token = attribute.replace(ATTRIBUTE_PREFIX, "");
         UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken(token);
 
@@ -45,7 +44,7 @@ public class JWTValidationToken extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {
-        String username = JWT.require(Algorithm.HMAC512(JWTAuthenticationFilter.TOKEN_PASSWORD))
+        String username = JWT.require(Algorithm.HMAC512(this.config.getTokenPassword()))
                 .build()
                 .verify(token)
                 .getSubject();

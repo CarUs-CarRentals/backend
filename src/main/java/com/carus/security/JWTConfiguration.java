@@ -1,5 +1,6 @@
 package com.carus.security;
 
+import com.carus.config.AuthenticationConfig;
 import com.carus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,9 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthenticationConfig authenticationConfig;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
@@ -33,10 +37,11 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/create").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/refresh-token").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTValidationToken(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), authenticationConfig))
+                .addFilter(new JWTValidationToken(authenticationManager(), authenticationConfig))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
