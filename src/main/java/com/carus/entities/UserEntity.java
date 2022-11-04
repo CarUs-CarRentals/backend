@@ -4,7 +4,13 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -42,6 +48,12 @@ public class UserEntity implements UserDetails {
 
     @Column(length = 60)
     private String gender;
+
+    @Column
+    private String refreshToken;
+
+    @Column
+    private LocalDateTime refreshTokenExpiration;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

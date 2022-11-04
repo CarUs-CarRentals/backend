@@ -1,9 +1,8 @@
 package com.carus.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
 import com.carus.entities.UserEntity;
+import com.carus.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,11 +12,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,9 +23,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final AuthenticationConfig config;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationConfig config) {
+    private final UserService userService;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationConfig config, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.config = config;
+        this.userService = userService;
 
         setFilterProcessesUrl("/api/login");
     }
@@ -46,26 +46,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
+            throws IOException {
         UserEntity user = (UserEntity) authResult.getPrincipal();
 
-        long currentMili = System.currentTimeMillis();
-
-        String token = JWT.create()
-                .withSubject(user.getLogin())
-                .withExpiresAt(new Date(currentMili + config.getTokenExpiration()))
-                .sign(Algorithm.HMAC512(config.getTokenPassword()));
-
-        String refreshToken = JWT.create()
-                .withSubject(user.getLogin())
-                .withExpiresAt(new Date(currentMili + 900_000_000 * config.getTokenExpiration()))
-                .sign(Algorithm.HMAC512(config.getTokenPassword()));
+        long expiration = System.currentTimeMillis() + config.getTokenExpiration();
+        String token = userService.generateToken(user.getLogin());
 
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
-        data.put("tokenExpiration", currentMili + config.getTokenExpiration());
-        data.put("refreshToken", refreshToken);
-        data.put("refreshTokenExpiration", currentMili + 2 * config.getTokenExpiration());
+        data.put("tokenExpiration", expiration / 1000);
+        data.put("refreshToken", user.getRefreshToken());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), data);

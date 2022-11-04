@@ -40,7 +40,7 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users/refresh-token").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), authenticationConfig))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), authenticationConfig, userService))
                 .addFilter(new JWTValidationToken(authenticationManager(), authenticationConfig))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
