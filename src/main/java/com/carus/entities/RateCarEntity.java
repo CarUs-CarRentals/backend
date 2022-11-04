@@ -21,6 +21,10 @@ public class RateCarEntity {
     @JoinColumn(name = "car_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_RateCar_car"))
     private CarEntity car;
 
+    @OneToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_location"))
+    private LocationEntity location;
+
     @Column(nullable = false, length = 10)
     private Double rate;
 

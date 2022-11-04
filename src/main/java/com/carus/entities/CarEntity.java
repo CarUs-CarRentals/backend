@@ -60,7 +60,7 @@ public class CarEntity {
     @Column(nullable = false)
     private Integer seats;
 
-    @Column
+    @Column(nullable = false)
     private Integer trunk;
 
     @Column(nullable = false)
