@@ -29,10 +29,15 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public CarDTO findById(Long id) {
-        return new CarDTO(carRepository.findById(id).orElseThrow(() -> {
+        return new CarDTO(this.findEntityById(id));
+    }
+
+    @Transactional(readOnly = true)
+    public CarEntity findEntityById(Long id) {
+        return carRepository.findById(id).orElseThrow(() -> {
             log.error("Entity with id {} not found", id);
             return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
-        }));
+        });
     }
 
     @Transactional
@@ -64,6 +69,7 @@ public class CarService {
         entity.setUser(userService.findEntityById(dto.getUser()));
         entity.setSeats(dto.getSeats());
         entity.setYear(dto.getYear());
+        entity.setTrunk(dto.getTrunk());
         entity.setPickupLocation(dto.getPickupLocation());
         entity.setReturnLocation(dto.getReturnLocation());
 

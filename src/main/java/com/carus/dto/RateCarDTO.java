@@ -1,6 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.CarEntity;
+import com.carus.entities.LocationEntity;
 import com.carus.entities.RateCarEntity;
 import com.carus.entities.UserEntity;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ public class RateCarDTO {
     private Long id;
     private UserEntity user;
     private CarEntity car;
+    private LocationEntity location;
     private Double rate;
     private String description;
     private String date;
@@ -23,6 +25,7 @@ public class RateCarDTO {
         this.id = entity.getId();
         this.user = entity.getUser();
         this.car = entity.getCar();
+        this.location = entity.getLocation();
         this.rate = entity.getRate();
         this.description = entity.getDescription();
         this.date = entity.getDate();
