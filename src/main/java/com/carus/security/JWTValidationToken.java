@@ -2,7 +2,6 @@ package com.carus.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.carus.config.AuthenticationConfig;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,24 +16,28 @@ import java.util.ArrayList;
 
 public class JWTValidationToken extends BasicAuthenticationFilter {
 
-    private final AuthenticationConfig config;
+    public static final String HEADER_ATTRIBUTE = "Authorization";
+    public static final String ATTRIBUTE_PREFIX = "Bearer ";
 
-    public JWTValidationToken(AuthenticationManager authenticationManager, AuthenticationConfig config) {
+    public JWTValidationToken(AuthenticationManager authenticationManager) {
         super(authenticationManager);
-        this.config = config;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        String attribute = request.getHeader(config.getTokenRequestHeader());
+        String attribute = request.getHeader(HEADER_ATTRIBUTE);
 
-        if (attribute == null || !attribute.startsWith(config.getTokenPrefix())) {
+        if (attribute == null) {
             chain.doFilter(request, response);
             return;
         }
 
-        String token = attribute.replace(config.getTokenPrefix(), "");
+        if (!attribute.startsWith(ATTRIBUTE_PREFIX)) {
+            chain.doFilter(request, response);
+            return;
+        }
+        String token = attribute.replace(ATTRIBUTE_PREFIX, "");
         UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken(token);
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -42,7 +45,7 @@ public class JWTValidationToken extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {
-        String username = JWT.require(Algorithm.HMAC512(this.config.getTokenPassword()))
+        String username = JWT.require(Algorithm.HMAC512(JWTAuthenticationFilter.TOKEN_PASSWORD))
                 .build()
                 .verify(token)
                 .getSubject();

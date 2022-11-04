@@ -1,8 +1,5 @@
 package com.carus.services;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.carus.config.AuthenticationConfig;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
@@ -19,12 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,9 +28,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AuthenticationConfig authenticationConfig;
 
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
@@ -83,6 +72,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public UserDTO save(UserDTO dto) {
+        UserEntity entity = userRepository.save(this.dtoToEntity(dto));
+        return new UserDTO(entity);
+    }
+
+    @Transactional
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
@@ -102,45 +97,12 @@ public class UserService implements UserDetailsService {
 
     public UserEntity registerDtoToEntity(RegisterUserDTO dto) {
         UserEntity entity = new UserEntity();
+        entity.setId(dto.getId());
         entity.setLogin(dto.getLogin());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
-        entity.setRefreshToken(this.generateRefreshToken(entity.getLogin()));
-        entity.setRefreshTokenExpiration(LocalDateTime.now().plusYears(1));
         return entity;
     }
-
-    public Optional<String> refreshToken(HttpServletRequest request) {
-        String attribute = request.getHeader(authenticationConfig.getTokenRequestHeader());
-        String tokenPrefix = authenticationConfig.getTokenPrefix();
-        String tokenPassword = authenticationConfig.getTokenPassword();
-
-        if (attribute == null || !attribute.startsWith(tokenPrefix)) return Optional.empty();
-
-        String refreshToken = attribute.replace(tokenPrefix, "");
-        String username = JWT.require(Algorithm.HMAC512(tokenPassword))
-                .build()
-                .verify(refreshToken)
-                .getSubject();
-
-        UserEntity user = (UserEntity) this.loadUserByUsername(username);
-        String newToken = generateToken(user.getLogin());
-        return Optional.of(newToken);
-    }
-
-    public String generateToken(String username) {
-        return JWT.create()
-                .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + authenticationConfig.getTokenExpiration()))
-                .sign(Algorithm.HMAC512(authenticationConfig.getTokenPassword()));
-    }
-    public String generateRefreshToken(String username) {
-        return JWT.create()
-                .withSubject(username)
-                    .withExpiresAt(new Date(System.currentTimeMillis() + LocalDateTime.now().plusYears(1).toInstant(ZoneOffset.UTC).toEpochMilli()))
-                .sign(Algorithm.HMAC512(authenticationConfig.getTokenPassword()));
-    }
-
 }

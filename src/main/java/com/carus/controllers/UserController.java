@@ -2,6 +2,7 @@ package com.carus.controllers;
 
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UserDTO;
+import com.carus.entities.UserEntity;
 import com.carus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @PostMapping
+    public ResponseEntity<UserDTO> save(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.save(dto));
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         userService.deleteById(id);
@@ -50,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<UserDTO> update(@RequestBody RegisterUserDTO dto) {
-        return ResponseEntity.ok(userService.create(dto));
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.save(dto));
     }
 }

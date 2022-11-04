@@ -1,10 +1,9 @@
 package com.carus.security;
 
-import com.carus.config.AuthenticationConfig;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.entities.UserEntity;
-import com.carus.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,23 +11,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+
+    public static final int TOKEN_EXPIRATION = 900_000;
+
+    public static final String TOKEN_PASSWORD = "fca54529-840a-4ac4-b1de-03cd4a14b687";
+
     private final AuthenticationManager authenticationManager;
-    private final AuthenticationConfig config;
 
-    private final UserService userService;
-
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationConfig config, UserService userService) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.config = config;
-        this.userService = userService;
 
         setFilterProcessesUrl("/api/login");
     }
@@ -45,19 +44,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
-            throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserEntity user = (UserEntity) authResult.getPrincipal();
 
-        long expiration = System.currentTimeMillis() + config.getTokenExpiration();
-        String token = userService.generateToken(user.getLogin());
+        String token = JWT.create()
+                .withSubject(user.getLogin())
+                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION))
+                .sign(Algorithm.HMAC512(TOKEN_PASSWORD));
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("token", token);
-        data.put("tokenExpiration", expiration / 1000);
-        data.put("refreshToken", user.getRefreshToken());
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), data);
+        response.getWriter().write(token);
+        response.getWriter().flush();
     }
 }
