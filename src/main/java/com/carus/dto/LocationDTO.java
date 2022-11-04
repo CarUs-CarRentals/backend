@@ -1,7 +1,9 @@
 package com.carus.dto;
 
 import com.carus.entities.LocationEntity;
+import com.carus.enums.ELocationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,16 +18,18 @@ public class LocationDTO {
     private Long id;
     private Long user;
     private Long car;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime locationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime returnDate;
     private Double price;
     private Long latitude;
     private Long longitude;
     private String address;
-    private String status;
-    private Boolean isReview;
+    private ELocationStatus status;
+    private Boolean isReview = false;
 
     public LocationDTO(LocationEntity entity) {
         this.id = entity.getId();
