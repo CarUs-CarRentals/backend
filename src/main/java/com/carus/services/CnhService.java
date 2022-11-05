@@ -39,7 +39,7 @@ public class CnhService {
 
     @Transactional
     public CnhDTO save(CnhDTO dto) {
-        CnhEntity entity = this.dtoToEntity(dto, null);
+        CnhEntity entity = this.dtoToEntity(dto);
         try {
             entity = cnhRepository.save(entity);
             return new CnhDTO(entity);
@@ -49,10 +49,10 @@ public class CnhService {
     }
 
     @Transactional
-    public CnhDTO update(CnhDTO dto) {
-        CnhEntity entity = this.findEntityById(dto.getId());
-        entity = cnhRepository.save(this.dtoToEntity(dto, entity));
-        return new CnhDTO(entity);
+    public CnhDTO update(CnhDTO dto, Long id) {
+        CnhEntity entity = this.dtoToEntity(dto);
+        entity.setId(id);
+        return new CnhDTO(cnhRepository.save(entity));
     }
 
     @Transactional
@@ -76,9 +76,9 @@ public class CnhService {
         });
     }
 
-    private CnhEntity dtoToEntity(CnhDTO dto, CnhEntity oldEntity) {
+    private CnhEntity dtoToEntity(CnhDTO dto) {
         UserEntity user = userService.findEntityById(dto.getUserId());
-        CnhEntity entity = oldEntity == null ? new CnhEntity() : oldEntity;
+        CnhEntity entity = new CnhEntity();
         entity.setRg(dto.getRg());
         entity.setUser(user);
         entity.setRegisterNumber((dto.getRegisterNumber()));
