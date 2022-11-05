@@ -4,12 +4,16 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
 import com.carus.dto.RegisterUserDTO;
+import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.UserRepository;
+import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
+import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,6 +68,17 @@ public class UserService implements UserDetailsService {
         return new UserDTO(userRepository.save(entity));
     }
 
+    public UserDTO update(UpdateUserDTO user, Long id) {
+        try {
+            UserEntity entity = this.updateDtoToEntity(user, id);
+            return new UserDTO(userRepository.save(entity));
+        } catch (DataIntegrityViolationException constraintException) {
+            throw new EntityAlreadyExistsException("Username " + user.getLogin() + " is already used");
+        } catch (Exception ex) {
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
     protected UserEntity getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity logged = userRepository.findByLogin(authentication.getPrincipal().toString()).get();
@@ -87,9 +102,9 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public UserEntity dtoToEntity(UserDTO dto) {
-        UserEntity entity = new UserEntity();
-        entity.setId(dto.getId());
+    public UserEntity updateDtoToEntity(UpdateUserDTO dto, Long id) {
+        UserEntity entity = this.findEntityById(id);
+        entity.setLogin(dto.getLogin());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
@@ -97,6 +112,7 @@ public class UserService implements UserDetailsService {
         entity.setRg(dto.getRg());
         entity.setPhone(dto.getPhone());
         entity.setGender(dto.getGender());
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         return entity;
     }
 

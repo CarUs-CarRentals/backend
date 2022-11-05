@@ -1,6 +1,7 @@
 package com.carus.controllers;
 
 import com.carus.dto.RegisterUserDTO;
+import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
 import com.carus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<UserDTO> update(@RequestBody RegisterUserDTO dto) {
-        return ResponseEntity.ok(userService.create(dto));
+    public ResponseEntity<UserDTO> update(@RequestBody UpdateUserDTO dto, @PathVariable Long id) {
+        return ResponseEntity.ok(userService.update(dto, id));
     }
 }
