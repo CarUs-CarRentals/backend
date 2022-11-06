@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -63,9 +64,18 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserDTO create(RegisterUserDTO user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        UserEntity entity = registerDtoToEntity(user);
-        return new UserDTO(userRepository.save(entity));
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            UserEntity entity = registerDtoToEntity(user);
+            return new UserDTO(userRepository.save(entity));
+        } catch (DataIntegrityViolationException constraintException) {
+            log.info("Login " + user.getLogin() + "already used");
+            String message = constraintException.getCause().getMessage().concat(". Login " + user.getLogin() + " already used");
+            throw new EntityAlreadyExistsException(message);
+        } catch (Exception ex) {
+            log.error(ex);
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     public UserDTO update(UpdateUserDTO user, Long id) {
@@ -73,8 +83,11 @@ public class UserService implements UserDetailsService {
             UserEntity entity = this.updateDtoToEntity(user, id);
             return new UserDTO(userRepository.save(entity));
         } catch (DataIntegrityViolationException constraintException) {
-            throw new EntityAlreadyExistsException("Username " + user.getLogin() + " is already used");
+            log.info("Login " + user.getLogin() + ", CPF " + user.getCpf() + " or RG " + user.getRg() + " already used");
+            String message = ". Login " + user.getLogin() + ", CPF " + user.getCpf() + " or RG " + user.getRg() + " already used";
+            throw new EntityAlreadyExistsException(constraintException.getCause().getMessage().concat(message));
         } catch (Exception ex) {
+            log.error(ex);
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
@@ -86,16 +99,9 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDTO getLoggedUserDTO() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity logged = userRepository.findByLogin(authentication.getPrincipal().toString()).get();
-        return new UserDTO(logged);
+        return new UserDTO(getLoggedUser());
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return user;
-    }
 
     @Transactional
     public void deleteById(Long id) {
@@ -113,6 +119,8 @@ public class UserService implements UserDetailsService {
         entity.setPhone(dto.getPhone());
         entity.setGender(dto.getGender());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        entity.setAbout(dto.getAbout());
+        entity.setProfileImageUrl(dto.getProfileImageUrl());
         return entity;
     }
 
@@ -125,6 +133,7 @@ public class UserService implements UserDetailsService {
         entity.setLastName(dto.getLastName());
         entity.setRefreshToken(this.generateRefreshToken(entity.getLogin()));
         entity.setRefreshTokenExpiration(LocalDateTime.now().plusYears(1));
+        entity.setMemberSince(LocalDate.now());
         return entity;
     }
 
@@ -152,6 +161,7 @@ public class UserService implements UserDetailsService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + authenticationConfig.getTokenExpiration()))
                 .sign(Algorithm.HMAC512(authenticationConfig.getTokenPassword()));
     }
+
     public String generateRefreshToken(String username) {
         return JWT.create()
                 .withSubject(username)
@@ -159,4 +169,9 @@ public class UserService implements UserDetailsService {
                 .sign(Algorithm.HMAC512(authenticationConfig.getTokenPassword()));
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
+    }
 }

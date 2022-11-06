@@ -20,4 +20,6 @@ public class UpdateUserDTO implements Serializable {
     private String phone;
     private String gender;
     private String password;
+    private String about;
+    private String profileImageUrl;
 }
