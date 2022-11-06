@@ -1,5 +1,6 @@
 package com.carus.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,10 +39,10 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(length = 11)
+    @Column(length = 11, unique = true)
     private String cpf;
 
-    @Column(length = 8)
+    @Column(length = 8, unique = true)
     private String rg;
 
     @Column(length = 20)
@@ -50,9 +52,19 @@ public class UserEntity implements UserDetails {
     private String gender;
 
     @Column
-    private String refreshToken;
+    private String about;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(columnDefinition = "DATE", nullable = false, updatable = false)
+    private LocalDate memberSince;
 
     @Column
+    private String profileImageUrl;
+
+    @Column
+    private String refreshToken;
+
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime refreshTokenExpiration;
 
     @Override
