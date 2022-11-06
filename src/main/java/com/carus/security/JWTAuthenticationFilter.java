@@ -4,6 +4,7 @@ import com.carus.config.AuthenticationConfig;
 import com.carus.entities.UserEntity;
 import com.carus.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,9 +66,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
             throws IOException, ServletException {
-        String username = super.obtainUsername(request);
-        new ObjectMapper().writeValue(response.getOutputStream(), failed);
+        if (failed.getMessage().equalsIgnoreCase("Bad credentials")) {
+            Map<String, Object> errors = new HashMap<>();
+            errors.put("code", HttpStatus.BAD_REQUEST.value());
+            errors.put("message", "INVALID LOGIN OR PASSWORD");
+            Map<String, Map<String, Object>> data = new HashMap<>();
+            data.put("error", errors);
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            new ObjectMapper().writeValue(response.getOutputStream(), data);
+        } else {
+            new ObjectMapper().writeValue(response.getOutputStream(), failed.getMessage());
+        }
     }
-
-
 }
