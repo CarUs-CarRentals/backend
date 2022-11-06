@@ -11,6 +11,7 @@ import com.carus.repositories.UserRepository;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
+import com.carus.services.exceptions.TokenException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,8 +29,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -137,22 +139,32 @@ public class UserService implements UserDetailsService {
         return entity;
     }
 
-    public Optional<String> refreshToken(HttpServletRequest request) {
-        String attribute = request.getHeader(authenticationConfig.getTokenRequestHeader());
-        String tokenPrefix = authenticationConfig.getTokenPrefix();
-        String tokenPassword = authenticationConfig.getTokenPassword();
+    public Map<String, Object> refreshToken(HttpServletRequest request) {
+        try {
+            String attribute = request.getHeader(authenticationConfig.getTokenRequestHeader());
+            String tokenPrefix = authenticationConfig.getTokenPrefix();
+            String tokenPassword = authenticationConfig.getTokenPassword();
 
-        if (attribute == null || !attribute.startsWith(tokenPrefix)) return Optional.empty();
+            if (attribute == null || !attribute.startsWith(tokenPrefix)) throw new TokenException("Invalid refresh token");
 
-        String refreshToken = attribute.replace(tokenPrefix, "");
-        String username = JWT.require(Algorithm.HMAC512(tokenPassword))
-                .build()
-                .verify(refreshToken)
-                .getSubject();
+            String refreshToken = attribute.replace(tokenPrefix, "");
+            String username = JWT.require(Algorithm.HMAC512(tokenPassword))
+                    .build()
+                    .verify(refreshToken)
+                    .getSubject();
 
-        UserEntity user = (UserEntity) this.loadUserByUsername(username);
-        String newToken = generateToken(user.getLogin());
-        return Optional.of(newToken);
+            UserEntity user = (UserEntity) this.loadUserByUsername(username);
+            String newToken = generateToken(user.getLogin());
+            long expiration = System.currentTimeMillis() + authenticationConfig.getTokenExpiration();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", newToken);
+            data.put("tokenExpiration", expiration / 1000);
+            return data;
+        } catch (Exception ex) {
+            log.error(ex);
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     public String generateToken(String username) {

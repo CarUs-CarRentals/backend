@@ -4,6 +4,7 @@ import com.carus.controllers.exceptions.StandartError;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
+import com.carus.services.exceptions.TokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -44,6 +45,17 @@ public class GenericExceptionHandler {
         error.setTimestamp(Instant.now());
         error.setStatus(requestStatus.value());
         error.setError("Duplicate key");
+        error.setMessage(e.getMessage());
+        return ResponseEntity.status(requestStatus).body(error);
+    }
+
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<StandartError> invalidToken(TokenException e, HttpServletRequest request) {
+        HttpStatus requestStatus = HttpStatus.BAD_REQUEST;
+        StandartError error = new StandartError();
+        error.setTimestamp(Instant.now());
+        error.setStatus(requestStatus.value());
+        error.setError("Invalid token");
         error.setMessage(e.getMessage());
         return ResponseEntity.status(requestStatus).body(error);
     }
