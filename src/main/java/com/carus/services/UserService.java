@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
             throw new EntityAlreadyExistsException(message);
         } catch (Exception ex) {
             log.error(ex);
-            throw new InternalServerErrorException(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
