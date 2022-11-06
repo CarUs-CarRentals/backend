@@ -30,7 +30,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.config = config;
         this.userService = userService;
 
-        setFilterProcessesUrl("/api/login");
+        setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override

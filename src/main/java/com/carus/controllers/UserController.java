@@ -34,11 +34,6 @@ public class UserController {
         return ResponseEntity.ok(userService.create(newUser));
     }
 
-    @GetMapping("/logged")
-    public ResponseEntity<?> loggedUser() {
-        return ResponseEntity.ok(userService.getLoggedUserDTO());
-    }
-
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
