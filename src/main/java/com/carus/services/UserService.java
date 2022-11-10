@@ -3,10 +3,14 @@ package com.carus.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
+import com.carus.dto.AddressDTO;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
+import com.carus.dto.UserProfileDTO;
+import com.carus.entities.AddressEntity;
 import com.carus.entities.UserEntity;
+import com.carus.repositories.AddressRepository;
 import com.carus.repositories.UserRepository;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
@@ -43,6 +47,12 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private RateUserService rateUserService;
 
     @Autowired
     private AuthenticationConfig authenticationConfig;
@@ -94,6 +104,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public UserProfileDTO getUserProfile() {
+        UserDTO user = this.getLoggedUserDTO();
+        AddressEntity address = addressRepository.findAddressByUserId(user.getId());
+        AddressDTO addressDTO = address != null ? new AddressDTO(address) : null;
+        Long rateNumber = rateUserService.countRatesByUserId(user.getId());
+        return new UserProfileDTO(user, addressDTO, rateNumber);
+    }
+
     protected UserEntity getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity logged = userRepository.findByLogin(authentication.getPrincipal().toString()).get();
@@ -103,7 +121,6 @@ public class UserService implements UserDetailsService {
     public UserDTO getLoggedUserDTO() {
         return new UserDTO(getLoggedUser());
     }
-
 
     @Transactional
     public void deleteById(Long id) {

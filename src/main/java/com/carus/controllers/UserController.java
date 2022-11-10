@@ -3,6 +3,7 @@ package com.carus.controllers;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
+import com.carus.dto.UserProfileDTO;
 import com.carus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,10 @@ public class UserController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDTO> update(@RequestBody UpdateUserDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(userService.update(dto, id));
+    }
+
+    @GetMapping(path = "/profile")
+    public ResponseEntity<UserProfileDTO> getUserProfile() {
+        return ResponseEntity.ok(userService.getUserProfile());
     }
 }

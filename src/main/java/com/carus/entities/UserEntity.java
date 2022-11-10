@@ -52,7 +52,7 @@ public class UserEntity implements UserDetails {
     private String gender;
 
     @Column
-    private String about;
+    private String about = "";
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATE", nullable = false, updatable = false)
