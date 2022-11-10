@@ -64,8 +64,14 @@ public class CarEntity {
     private Integer trunk;
 
     @Column(nullable = false)
-    private String pickupLocation;
+    private Long latitude;
 
     @Column(nullable = false)
-    private String returnLocation;
+    private Long longitude;
+
+    @Column(nullable = false)
+    private String imageUrl;
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    private String description;
 }

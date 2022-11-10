@@ -25,8 +25,10 @@ public class CarDTO implements Serializable {
     private Integer doors;
     private Integer seats;
     private Integer trunk;
-    private String pickupLocation;
-    private String returnLocation;
+    private Long latitude;
+    private Long longitude;
+    private String imageUrl;
+    private String description;
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
@@ -41,8 +43,10 @@ public class CarDTO implements Serializable {
         this.doors = entity.getDoors();
         this.seats = entity.getSeats();
         this.trunk = entity.getTrunk();
-        this.pickupLocation = entity.getPickupLocation();
-        this.returnLocation = entity.getReturnLocation();
+        this.latitude = entity.getLatitude();
+        this.longitude = entity.getLongitude();
+        this.imageUrl = entity.getImageUrl();
+        this.description = entity.getDescription();
     }
 
 }
