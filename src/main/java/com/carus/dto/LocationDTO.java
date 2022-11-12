@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class LocationDTO {
 
     private Long id;
-    private Long user;
+    private String user;
     private Long car;
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -33,7 +33,7 @@ public class LocationDTO {
 
     public LocationDTO(LocationEntity entity) {
         this.id = entity.getId();
-        this.user = entity.getUser().getId();
+        this.user = entity.getUser().getUuid();
         this.car = entity.getCar().getId();
         this.locationDate = entity.getLocationDate();
         this.returnDate = entity.getReturnDate();

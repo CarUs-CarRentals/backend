@@ -37,12 +37,12 @@ public class AddressService {
 
     @Transactional(readOnly = true)
     public List<AddressDTO> findAll() {
-        return addressRepository.findAll().stream().map(entity -> new AddressDTO(entity)).collect(Collectors.toList());
+        return addressRepository.findAll().stream().map(AddressDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public AddressDTO findByUserId(Long userId) {
-        return new AddressDTO(addressRepository.findAddressByUserId(userId));
+    public AddressDTO findByUserUuid(String userUuid) {
+        return new AddressDTO(addressRepository.findAddressByUserId(userUuid));
     }
 
     @Transactional(readOnly = true)
@@ -86,7 +86,7 @@ public class AddressService {
 
     private AddressEntity dtoToEntity(AddressDTO dto) {
         AddressEntity entity = new AddressEntity();
-        entity.setUser(userService.findEntityById(dto.getUser()));
+        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCep(dto.getCep());
         entity.setState(dto.getState());
         entity.setCity(dto.getCity());

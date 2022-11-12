@@ -17,7 +17,7 @@ public class CnhEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_cnh_user"))
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_cnh_user"))
     private UserEntity user;
 
     @Column(nullable = false, length = 8)

@@ -33,8 +33,8 @@ public class RateUserService {
     }
 
     @Transactional(readOnly = true)
-    public Long countRatesByUserId(Long userId) {
-        return rateUserRepository.countRatesByUserId(userId);
+    public Long countRatesByUserId(String userUuid) {
+        return rateUserRepository.countRatesByUserId(userUuid);
     }
 
     @Transactional

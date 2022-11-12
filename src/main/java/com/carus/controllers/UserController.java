@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,20 +36,20 @@ public class UserController {
         return ResponseEntity.ok(userService.create(newUser));
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+    @GetMapping(path = "/{uuid}")
+    public ResponseEntity<UserDTO> findById(@PathVariable String uuid) {
+        return ResponseEntity.ok(userService.findByUuid(uuid));
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        userService.deleteById(id);
+    @DeleteMapping(path = "/{uuid}")
+    public ResponseEntity<Void> deleteById(@PathVariable String uuid) {
+        userService.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<UserDTO> update(@RequestBody UpdateUserDTO dto, @PathVariable Long id) {
-        return ResponseEntity.ok(userService.update(dto, id));
+    @PutMapping(path = "/{uuid}")
+    public ResponseEntity<UserDTO> update(@RequestBody UpdateUserDTO dto, @PathVariable String uuid) {
+        return ResponseEntity.ok(userService.update(dto, uuid));
     }
 
     @GetMapping(path = "/profile")

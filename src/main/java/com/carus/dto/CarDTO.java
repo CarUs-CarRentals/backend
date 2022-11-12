@@ -2,8 +2,8 @@ package com.carus.dto;
 
 import com.carus.entities.CarEntity;
 import com.carus.enums.ECategory;
-import com.carus.enums.EGear;
 import com.carus.enums.EFuel;
+import com.carus.enums.EGear;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class CarDTO implements Serializable {
 
     private Long id;
     private String brand;
-    private Long user;
+    private String user;
     private String model;
     private Integer year;
     private String plate;
@@ -32,7 +32,7 @@ public class CarDTO implements Serializable {
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
-        this.user = entity.getUser().getId();
+        this.user = entity.getUser().getUuid();
         this.brand = entity.getBrand();
         this.model = entity.getModel();
         this.year = entity.getYear();

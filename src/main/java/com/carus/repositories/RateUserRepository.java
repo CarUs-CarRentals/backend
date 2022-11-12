@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RateUserRepository extends JpaRepository<RateUserEntity, Long> {
 
-    @Query("select count(r) from RateUserEntity r where r.ratedUser.id = ?1")
-    Long countRatesByUserId(Long userId);
+    @Query("select count(r) from RateUserEntity r where r.ratedUser.uuid = ?1")
+    Long countRatesByUserId(String userUuid);
 }
 
