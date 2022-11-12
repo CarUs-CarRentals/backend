@@ -41,6 +41,11 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
+    public AddressDTO findByUserId(Long userId) {
+        return new AddressDTO(addressRepository.findAddressByUserId(userId));
+    }
+
+    @Transactional(readOnly = true)
     public AddressEntity findEntityById(Long id) {
         return addressRepository.findById(id).orElseThrow(() -> {
             log.error("Entity with id {} not found", id);

@@ -47,6 +47,12 @@ public class CarService {
     }
 
     @Transactional
+    public CarDTO update(CarDTO dto, Long id) {
+        CarEntity updated = this.dtoToEntity(dto);
+        updated.setId(id);
+        return new CarDTO(carRepository.save(updated));
+    }
+    @Transactional
     public void deleteById(Long id) {
         carRepository.deleteById(id);
     }
@@ -70,8 +76,10 @@ public class CarService {
         entity.setSeats(dto.getSeats());
         entity.setYear(dto.getYear());
         entity.setTrunk(dto.getTrunk());
-        entity.setPickupLocation(dto.getPickupLocation());
-        entity.setReturnLocation(dto.getReturnLocation());
+        entity.setLatitude(dto.getLatitude());
+        entity.setLongitude(dto.getLongitude());
+        entity.setImageUrl(dto.getImageUrl());
+        entity.setDescription(dto.getDescription());
 
         return entity;
     }
