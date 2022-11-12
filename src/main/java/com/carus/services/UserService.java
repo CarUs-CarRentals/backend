@@ -128,6 +128,7 @@ public class UserService implements UserDetailsService {
 
     public UserEntity registerDtoToEntity(RegisterUserDTO dto) {
         UserEntity entity = new UserEntity();
+        entity.setUuid(dto.getUuid());
         entity.setLogin(dto.getLogin());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());
