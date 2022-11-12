@@ -41,8 +41,8 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public AddressDTO findByUserId(Long userId) {
-        return new AddressDTO(addressRepository.findAddressByUserId(userId));
+    public AddressDTO findByUserUuid(String userUuid) {
+        return new AddressDTO(addressRepository.findAddressByUserId(userUuid));
     }
 
     @Transactional(readOnly = true)

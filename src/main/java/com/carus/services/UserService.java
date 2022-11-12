@@ -106,9 +106,9 @@ public class UserService implements UserDetailsService {
 
     public UserProfileDTO getUserProfile() {
         UserDTO user = this.getLoggedUserDTO();
-        AddressEntity address = addressRepository.findAddressByUserId(user.getId());
+        AddressEntity address = addressRepository.findAddressByUserId(user.getUuid());
         AddressDTO addressDTO = address != null ? new AddressDTO(address) : null;
-        Long rateNumber = rateUserService.countRatesByUserId(user.getId());
+        Long rateNumber = rateUserService.countRatesByUserId(user.getUuid());
         return new UserProfileDTO(user, addressDTO, rateNumber);
     }
 
