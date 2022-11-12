@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterUserDTO {
 
-    private Long id;
+    private String uuid;
     private String login;
     private String password;
     private String email;
@@ -18,7 +18,7 @@ public class RegisterUserDTO {
     private String lastName;
 
     public RegisterUserDTO(UserEntity userEntity) {
-        this.id = userEntity.getId();
+        this.uuid = userEntity.getUuid();
         this.login = userEntity.getLogin();
         this.password = userEntity.getPassword();
         this.email = userEntity.getEmail();

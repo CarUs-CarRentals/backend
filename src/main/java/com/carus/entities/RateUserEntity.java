@@ -14,14 +14,14 @@ public class RateUserEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "rated_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_rated_user"))
+    @JoinColumn(name = "rated_user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_rated_user"))
     private UserEntity ratedUser;
 
     @OneToOne
-    @JoinColumn(name = "evaluator_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_evaluator_user"))
+    @JoinColumn(name = "evaluator_user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_evaluator_user"))
     private UserEntity evaluatorUser;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private Double rate;
 
     @Column(nullable = false, length = 255)

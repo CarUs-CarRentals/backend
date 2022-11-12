@@ -47,13 +47,19 @@ public class CarService {
     }
 
     @Transactional
+    public CarDTO update(CarDTO dto, Long id) {
+        CarEntity updated = this.dtoToEntity(dto);
+        updated.setId(id);
+        return new CarDTO(carRepository.save(updated));
+    }
+    @Transactional
     public void deleteById(Long id) {
         carRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     public List<CarDTO> getCarsByLoggedUser() {
-        List<CarEntity> cars = carRepository.findCarsByUserId(userService.getLoggedUser().getId());
+        List<CarEntity> cars = carRepository.findCarsByUserUuid(userService.getLoggedUser().getUuid());
         return cars.stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
@@ -66,12 +72,14 @@ public class CarService {
         entity.setDoors(dto.getDoors());
         entity.setModel(dto.getModel());
         entity.setPlate(dto.getPlate());
-        entity.setUser(userService.findEntityById(dto.getUser()));
+        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setSeats(dto.getSeats());
         entity.setYear(dto.getYear());
         entity.setTrunk(dto.getTrunk());
-        entity.setPickupLocation(dto.getPickupLocation());
-        entity.setReturnLocation(dto.getReturnLocation());
+        entity.setLatitude(dto.getLatitude());
+        entity.setLongitude(dto.getLongitude());
+        entity.setImageUrl(dto.getImageUrl());
+        entity.setDescription(dto.getDescription());
 
         return entity;
     }

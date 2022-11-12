@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class AddressDTO {
 
     private Long id;
-    private Long user;
+    private String user;
     private String cep;
     private EState state;
     private String city;
@@ -22,7 +22,7 @@ public class AddressDTO {
 
     public AddressDTO (AddressEntity entity) {
         this.id = entity.getId();
-        this.user = entity.getUser().getId();
+        this.user = entity.getUser().getUuid();
         this.cep = entity.getCep();
         this.state = entity.getState();
         this.city = entity.getCity();

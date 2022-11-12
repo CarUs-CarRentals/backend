@@ -68,7 +68,7 @@ public class LocationService {
 
     private LocationEntity dtoToEntity(LocationDTO dto) {
         LocationEntity entity = new LocationEntity();
-        entity.setUser(userService.findEntityById(dto.getUser()));
+        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCar(carService.findEntityById(dto.getCar()));
         entity.setLocationDate(dto.getLocationDate());
         entity.setReturnDate(dto.getReturnDate());

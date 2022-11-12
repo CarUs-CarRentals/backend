@@ -32,6 +32,11 @@ public class RateUserService {
         return new RateUserDTO(entity);
     }
 
+    @Transactional(readOnly = true)
+    public Long countRatesByUserId(String userUuid) {
+        return rateUserRepository.countRatesByUserId(userUuid);
+    }
+
     @Transactional
     public void deleteById(Long id) {
         rateUserRepository.deleteById(id);
