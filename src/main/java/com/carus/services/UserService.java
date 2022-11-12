@@ -52,15 +52,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO findById(Long id) {
-        return new UserDTO(this.findEntityById(id));
+    public UserDTO findByUuid(String uuid) {
+        return new UserDTO(this.findEntityByUuid(uuid));
     }
 
     @Transactional(readOnly = true)
-    public UserEntity findEntityById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> {
-            log.error("Entity with id {} not found", id);
-            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+    public UserEntity findEntityByUuid(String uuid) {
+        return userRepository.findByUuid(uuid).orElseThrow(() -> {
+            log.error("Entity with id {} not found", uuid);
+            return new EntityNotFoundException("Entity with id ".concat(uuid.toString()).concat(" not found"));
         });
     }
 
@@ -80,9 +80,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO update(UpdateUserDTO user, Long id) {
+    public UserDTO update(UpdateUserDTO user, String uuid) {
         try {
-            UserEntity entity = this.updateDtoToEntity(user, id);
+            UserEntity entity = this.updateDtoToEntity(user, uuid);
             return new UserDTO(userRepository.save(entity));
         } catch (DataIntegrityViolationException constraintException) {
             log.info("Login " + user.getLogin() + ", CPF " + user.getCpf() + " or RG " + user.getRg() + " already used");
@@ -106,12 +106,12 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteByUuid(String uuid) {
+        userRepository.deleteByUuid(uuid);
     }
 
-    public UserEntity updateDtoToEntity(UpdateUserDTO dto, Long id) {
-        UserEntity entity = this.findEntityById(id);
+    public UserEntity updateDtoToEntity(UpdateUserDTO dto, String uuid) {
+        UserEntity entity = this.findEntityByUuid(uuid);
         entity.setLogin(dto.getLogin());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());

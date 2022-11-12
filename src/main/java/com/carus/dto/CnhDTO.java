@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class CnhDTO {
 
     private Long id;
-    private Long userId;
+    private String user;
     private String rg;
     private String registerNumber;
     private String cnhNumber;
@@ -27,7 +27,7 @@ public class CnhDTO {
 
     public CnhDTO(CnhEntity entity) {
         this.id = entity.getId();
-        this.userId = entity.getUser().getId();
+        this.user = entity.getUser().getUuid();
         this.rg = entity.getRg();
         this.registerNumber = entity.getRegisterNumber();
         this.cnhNumber = entity.getCnhNumber();
