@@ -36,6 +36,11 @@ public class RateCarService {
     }
 
     @Transactional(readOnly = true)
+    public List<RateCarDTO> findAllByCarId(Long carId) {
+        return rateCarRepository.findAllByCarId(carId).stream().map(RateCarDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public RateCarEntity findEntityById(Long id) {
         return rateCarRepository.findById(id).orElseThrow(() -> {
             log.error("Entity with id {} not found", id);
