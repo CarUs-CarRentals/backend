@@ -3,6 +3,7 @@ package com.carus.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "rate_user")
@@ -19,7 +20,7 @@ public class RateUserEntity {
 
     @OneToOne
     @JoinColumn(name = "evaluator_user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_evaluator_user"))
-    private UserEntity evaluatorUser;
+    private UserEntity evaluatedUser;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private Double rate;
@@ -27,6 +28,6 @@ public class RateUserEntity {
     @Column(nullable = false, length = 255)
     private String description;
 
-    @Column(nullable = false, length = 20)
-    private String date;
+    @Column(nullable = false)
+    private LocalDate date;
 }
