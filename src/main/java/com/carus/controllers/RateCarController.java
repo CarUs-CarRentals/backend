@@ -25,7 +25,7 @@ public class RateCarController {
         return ResponseEntity.ok(rateCarService.findById(id));
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<RateCarDTO> save(@RequestBody RateCarDTO dto) {
         return ResponseEntity.ok(rateCarService.save(dto));
     }
