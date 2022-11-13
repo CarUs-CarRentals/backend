@@ -47,7 +47,7 @@ public class RateUserService {
 
     @Transactional
     public RateUserDTO save(RateUserDTO dto) {
-        RateUserEntity entity = this.DTOToEntity(dto);
+        RateUserEntity entity = this.dtoToEntity(dto);
         try {
             entity = rateUserRepository.save(entity);
             return new RateUserDTO(entity);
@@ -74,7 +74,7 @@ public class RateUserService {
         }
     }
 
-    private RateUserEntity DTOToEntity(RateUserDTO dto) {
+    private RateUserEntity dtoToEntity(RateUserDTO dto) {
         RateUserEntity entity = new RateUserEntity();
         entity.setRatedUser(userRepository.findByUuid(dto.getRatedUser()).get());
         entity.setEvaluatedUser(userRepository.findByUuid(dto.getEvaluatedUser()).get());

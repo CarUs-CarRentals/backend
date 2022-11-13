@@ -3,6 +3,7 @@ package com.carus.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "rate_car")
@@ -32,6 +33,6 @@ public class RateCarEntity {
     private String description;
 
     @Column(nullable = false, length = 20)
-    private String date;
+    private LocalDate date;
 
 }
