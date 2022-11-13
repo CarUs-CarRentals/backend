@@ -1,10 +1,13 @@
 package com.carus.dto;
 
 import com.carus.entities.RateUserEntity;
-import com.carus.entities.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -12,16 +15,18 @@ import lombok.NoArgsConstructor;
 public class RateUserDTO {
 
     private Long id;
-    private UserEntity ratedUser;
-    private UserEntity evaluatedUser;
+    private String ratedUser;
+    private String evaluatedUser;
     private Double rate;
     private String description;
-    private String date;
+    @JsonDeserialize
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     public RateUserDTO(RateUserEntity entity) {
         this.id = entity.getId();
-        this.ratedUser = entity.getRatedUser();
-        this.evaluatedUser = entity.getEvaluatorUser();
+        this.ratedUser = entity.getRatedUser().getUuid();
+        this.evaluatedUser = entity.getEvaluatedUser().getUuid();
         this.rate = entity.getRate();
         this.description = entity.getDescription();
         this.date = entity.getDate();

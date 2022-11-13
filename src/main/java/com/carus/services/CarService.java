@@ -52,6 +52,7 @@ public class CarService {
         updated.setId(id);
         return new CarDTO(carRepository.save(updated));
     }
+
     @Transactional
     public void deleteById(Long id) {
         carRepository.deleteById(id);
