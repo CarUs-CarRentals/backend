@@ -1,6 +1,6 @@
 package com.carus.dto;
 
-import com.carus.entities.LocationEntity;
+import com.carus.entities.RentalEntity;
 import com.carus.enums.ELocationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationDTO {
+public class RentalDTO {
 
     private Long id;
     private String user;
@@ -31,7 +31,7 @@ public class LocationDTO {
     private ELocationStatus status;
     private Boolean isReview = false;
 
-    public LocationDTO(LocationEntity entity) {
+    public RentalDTO(RentalEntity entity) {
         this.id = entity.getId();
         this.user = entity.getUser().getUuid();
         this.car = entity.getCar().getId();

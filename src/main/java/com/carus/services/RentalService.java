@@ -1,7 +1,7 @@
 package com.carus.services;
 
-import com.carus.dto.LocationDTO;
-import com.carus.entities.LocationEntity;
+import com.carus.dto.RentalDTO;
+import com.carus.entities.RentalEntity;
 import com.carus.repositories.LocationRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
-public class LocationService {
+public class RentalService {
 
     @Autowired
     private LocationRepository locationRepository;
@@ -28,29 +28,29 @@ public class LocationService {
     private CarService carService;
 
     @Transactional(readOnly = true)
-    public List<LocationDTO> findAll() {
-        return locationRepository.findAll().stream().map(LocationDTO::new).collect(Collectors.toList());
+    public List<RentalDTO> findAll() {
+        return locationRepository.findAll().stream().map(RentalDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public LocationDTO findById(Long id) {
-        return new LocationDTO(locationRepository.findById(id).orElseThrow(() -> {
+    public RentalDTO findById(Long id) {
+        return new RentalDTO(locationRepository.findById(id).orElseThrow(() -> {
             log.error("Entity with id {} not found", id);
             return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
         }));
     }
 
     @Transactional
-    public LocationDTO save(LocationDTO dto) {
-        LocationEntity entity = locationRepository.save(this.dtoToEntity(dto));
-        return new LocationDTO(entity);
+    public RentalDTO save(RentalDTO dto) {
+        RentalEntity entity = locationRepository.save(this.dtoToEntity(dto));
+        return new RentalDTO(entity);
     }
 
     @Transactional
-    public LocationDTO update(LocationDTO dto, Long id) {
-        LocationEntity updated = this.dtoToEntity(dto);
+    public RentalDTO update(RentalDTO dto, Long id) {
+        RentalEntity updated = this.dtoToEntity(dto);
         updated.setId(id);
-        return new LocationDTO(locationRepository.save(updated));
+        return new RentalDTO(locationRepository.save(updated));
     }
 
     @Transactional
@@ -66,8 +66,8 @@ public class LocationService {
         }
     }
 
-    private LocationEntity dtoToEntity(LocationDTO dto) {
-        LocationEntity entity = new LocationEntity();
+    private RentalEntity dtoToEntity(RentalDTO dto) {
+        RentalEntity entity = new RentalEntity();
         entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCar(carService.findEntityById(dto.getCar()));
         entity.setLocationDate(dto.getLocationDate());

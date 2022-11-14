@@ -24,7 +24,7 @@ public class RateCarEntity {
 
     @OneToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_location"))
-    private LocationEntity location;
+    private RentalEntity location;
 
     @Column(nullable = false, length = 10)
     private Double rate;
