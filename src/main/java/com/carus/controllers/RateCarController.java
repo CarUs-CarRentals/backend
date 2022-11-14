@@ -20,12 +20,18 @@ public class RateCarController {
         return ResponseEntity.ok(rateCarService.findAll());
     }
 
+    @GetMapping("/car/{carId}")
+    public ResponseEntity<List<RateCarDTO>> findAllByCarId(@PathVariable Long carId) {
+        return ResponseEntity.ok(rateCarService.findAllByCarId(carId));
+    }
+
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<RateCarDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(rateCarService.findById(id));
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<RateCarDTO> save(@RequestBody RateCarDTO dto) {
         return ResponseEntity.ok(rateCarService.save(dto));
     }

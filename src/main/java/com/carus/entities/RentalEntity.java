@@ -18,7 +18,7 @@ public class RentalEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_locator_user"))
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_locator_user"))
     private UserEntity user;
 
     @OneToOne

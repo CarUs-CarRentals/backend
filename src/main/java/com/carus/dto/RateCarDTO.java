@@ -1,12 +1,13 @@
 package com.carus.dto;
 
-import com.carus.entities.CarEntity;
-import com.carus.entities.RentalEntity;
 import com.carus.entities.RateCarEntity;
-import com.carus.entities.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -14,18 +15,19 @@ import lombok.NoArgsConstructor;
 public class RateCarDTO {
 
     private Long id;
-    private UserEntity user;
-    private CarEntity car;
-    private RentalEntity location;
+    private String userUuid;
+    private Long carId;
     private Double rate;
     private String description;
-    private String date;
+
+    @JsonDeserialize
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     public RateCarDTO(RateCarEntity entity) {
         this.id = entity.getId();
-        this.user = entity.getUser();
-        this.car = entity.getCar();
-        this.location = entity.getLocation();
+        this.userUuid = entity.getUser().getUuid();
+        this.carId = entity.getCar().getId();
         this.rate = entity.getRate();
         this.description = entity.getDescription();
         this.date = entity.getDate();

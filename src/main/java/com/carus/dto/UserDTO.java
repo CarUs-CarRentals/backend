@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserDTO {
 
-    private Long id;
+    private String uuid;
     private String login;
     private String email;
     private String firstName;
@@ -26,7 +26,7 @@ public class UserDTO {
     private String profileImageUrl;
 
     public UserDTO(UserEntity entity) {
-        this.id = entity.getId();
+        this.uuid = entity.getUuid();
         this.login = entity.getLogin();
         this.email = entity.getEmail();
         this.firstName = entity.getFirstName();

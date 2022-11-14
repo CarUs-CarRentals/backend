@@ -53,6 +53,7 @@ public class CarService {
         updated.setId(id);
         return new CarDTO(carRepository.save(updated));
     }
+
     @Transactional
     public void deleteById(Long id) {
         carRepository.deleteById(id);
@@ -60,7 +61,7 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public List<CarDTO> getCarsByLoggedUser() {
-        List<CarEntity> cars = carRepository.findCarsByUserId(userService.getLoggedUser().getId());
+        List<CarEntity> cars = carRepository.findCarsByUserUuid(userService.getLoggedUser().getUuid());
         return cars.stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
@@ -73,13 +74,12 @@ public class CarService {
         entity.setDoors(dto.getDoors());
         entity.setModel(dto.getModel());
         entity.setPlate(dto.getPlate());
-        entity.setUser(userService.findEntityById(dto.getUser()));
+        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setSeats(dto.getSeats());
         entity.setYear(dto.getYear());
         entity.setTrunk(dto.getTrunk());
         entity.setLatitude(dto.getLatitude());
         entity.setLongitude(dto.getLongitude());
-        entity.setImageUrl(dto.getImageUrl());
         entity.setDescription(dto.getDescription());
         entity.setAddress(dto.getAddress());
         entity.setCarImage(dto.getCarImage());

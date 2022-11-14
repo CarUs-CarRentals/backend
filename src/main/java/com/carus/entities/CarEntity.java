@@ -19,7 +19,7 @@ public class CarEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_car_user"))
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_car_user"))
     private UserEntity user;
 
     @Column(nullable = false, length = 50)
@@ -61,9 +61,6 @@ public class CarEntity {
     @Column(nullable = false)
     private Long longitude;
 
-    @Column(nullable = false)
-    private String imageUrl;
-
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String description;
 
@@ -71,8 +68,8 @@ public class CarEntity {
     private String address;
 
     @ManyToMany
-    @JoinTable(name = "carImage",
-            joinColumns = @JoinColumn(name = "cariD"),
-            inverseJoinColumns = @JoinColumn(name = "imageId"))
+    @JoinTable(name = "car_image",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<CarImageEntity> carImage = new ArrayList<>(0);
 }

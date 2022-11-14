@@ -3,10 +3,14 @@ package com.carus.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
+import com.carus.dto.AddressDTO;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
+import com.carus.dto.UserProfileDTO;
+import com.carus.entities.AddressEntity;
 import com.carus.entities.UserEntity;
+import com.carus.repositories.AddressRepository;
 import com.carus.repositories.UserRepository;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
@@ -45,6 +49,12 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private RateUserService rateUserService;
+
+    @Autowired
     private AuthenticationConfig authenticationConfig;
 
     public List<UserDTO> findAll() {
@@ -52,15 +62,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO findById(Long id) {
-        return new UserDTO(this.findEntityById(id));
+    public UserDTO findByUuid(String uuid) {
+        return new UserDTO(this.findEntityByUuid(uuid));
     }
 
     @Transactional(readOnly = true)
-    public UserEntity findEntityById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> {
-            log.error("Entity with id {} not found", id);
-            return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
+    public UserEntity findEntityByUuid(String uuid) {
+        return userRepository.findByUuid(uuid).orElseThrow(() -> {
+            log.error("Entity with id {} not found", uuid);
+            return new EntityNotFoundException("Entity with id ".concat(uuid.toString()).concat(" not found"));
         });
     }
 
@@ -80,9 +90,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO update(UpdateUserDTO user, Long id) {
+    public UserDTO update(UpdateUserDTO user, String uuid) {
         try {
-            UserEntity entity = this.updateDtoToEntity(user, id);
+            UserEntity entity = this.updateDtoToEntity(user, uuid);
             return new UserDTO(userRepository.save(entity));
         } catch (DataIntegrityViolationException constraintException) {
             log.info("Login " + user.getLogin() + ", CPF " + user.getCpf() + " or RG " + user.getRg() + " already used");
@@ -92,6 +102,14 @@ public class UserService implements UserDetailsService {
             log.error(ex);
             throw new InternalServerErrorException(ex.getMessage());
         }
+    }
+
+    public UserProfileDTO getUserProfile() {
+        UserDTO user = this.getLoggedUserDTO();
+        AddressEntity address = addressRepository.findAddressByUserId(user.getUuid());
+        AddressDTO addressDTO = address != null ? new AddressDTO(address) : null;
+        Long rateNumber = rateUserService.countRatesByUserId(user.getUuid());
+        return new UserProfileDTO(user, addressDTO, rateNumber);
     }
 
     protected UserEntity getLoggedUser() {
@@ -104,14 +122,13 @@ public class UserService implements UserDetailsService {
         return new UserDTO(getLoggedUser());
     }
 
-
     @Transactional
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteByUuid(String uuid) {
+        userRepository.deleteByUuid(uuid);
     }
 
-    public UserEntity updateDtoToEntity(UpdateUserDTO dto, Long id) {
-        UserEntity entity = this.findEntityById(id);
+    public UserEntity updateDtoToEntity(UpdateUserDTO dto, String uuid) {
+        UserEntity entity = this.findEntityByUuid(uuid);
         entity.setLogin(dto.getLogin());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
@@ -128,6 +145,7 @@ public class UserService implements UserDetailsService {
 
     public UserEntity registerDtoToEntity(RegisterUserDTO dto) {
         UserEntity entity = new UserEntity();
+        entity.setUuid(dto.getUuid());
         entity.setLogin(dto.getLogin());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());

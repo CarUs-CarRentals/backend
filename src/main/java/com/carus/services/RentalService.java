@@ -68,7 +68,7 @@ public class RentalService {
 
     private RentalEntity dtoToEntity(RentalDTO dto) {
         RentalEntity entity = new RentalEntity();
-        entity.setUser(userService.findEntityById(dto.getUser()));
+        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCar(carService.findEntityById(dto.getCar()));
         entity.setLocationDate(dto.getLocationDate());
         entity.setReturnDate(dto.getReturnDate());
