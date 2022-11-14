@@ -2,6 +2,7 @@ package com.carus.services;
 
 import com.carus.dto.CarDTO;
 import com.carus.entities.CarEntity;
+import com.carus.entities.CarImageEntity;
 import com.carus.repositories.CarRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -80,6 +81,8 @@ public class CarService {
         entity.setLongitude(dto.getLongitude());
         entity.setImageUrl(dto.getImageUrl());
         entity.setDescription(dto.getDescription());
+        entity.setAddress(dto.getAddress());
+        entity.setCarImage(dto.getCarImage());
 
         return entity;
     }

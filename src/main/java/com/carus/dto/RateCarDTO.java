@@ -1,7 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.CarEntity;
-import com.carus.entities.LocationEntity;
+import com.carus.entities.RentalEntity;
 import com.carus.entities.RateCarEntity;
 import com.carus.entities.UserEntity;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ public class RateCarDTO {
     private Long id;
     private UserEntity user;
     private CarEntity car;
-    private LocationEntity location;
+    private RentalEntity location;
     private Double rate;
     private String description;
     private String date;
