@@ -21,19 +21,24 @@ public class RateUserController {
         return ResponseEntity.ok(rateUserService.findAll());
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<RateUserDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(rateUserService.findById(id));
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(value = "/create")
     public ResponseEntity<RateUserDTO> save(@RequestBody RateUserDTO dto) {
         return ResponseEntity.ok(rateUserService.save(dto));
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         rateUserService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/user/{uuid}")
+    public ResponseEntity<List<RateUserDTO>> findAllByUserUuid(@PathVariable String uuid) {
+        return ResponseEntity.ok(rateUserService.findAllByUserUuid(uuid));
     }
 }

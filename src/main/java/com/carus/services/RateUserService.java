@@ -56,6 +56,13 @@ public class RateUserService {
         }
     }
 
+    @Transactional
+    public List<RateUserDTO> findAllByUserUuid(String uuid) {
+        List<RateUserEntity> rateUser = rateUserRepository.findByUserUuid(uuid);
+        return rateUser.stream().map(RateUserDTO::new).collect(Collectors.toList());
+
+    }
+
     @Transactional(readOnly = true)
     public Long countRatesByUserId(String userUuid) {
         return rateUserRepository.countRatesByUserId(userUuid);
