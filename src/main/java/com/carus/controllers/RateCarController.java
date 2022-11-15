@@ -26,19 +26,24 @@ public class RateCarController {
     }
 
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<RateCarDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(rateCarService.findById(id));
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(value = "/create")
     public ResponseEntity<RateCarDTO> save(@RequestBody RateCarDTO dto) {
         return ResponseEntity.ok(rateCarService.save(dto));
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         rateCarService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/car-by-user/{uuid}")
+    public ResponseEntity<List<RateCarDTO>> findAllByUserUuid(@PathVariable String uuid) {
+        return ResponseEntity.ok(rateCarService.findAllByUserUuid(uuid));
     }
 }
