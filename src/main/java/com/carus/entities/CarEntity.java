@@ -67,6 +67,9 @@ public class CarEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private Double price;
+
     @ManyToMany
     @JoinTable(name = "car_image",
             joinColumns = @JoinColumn(name = "car_id"),

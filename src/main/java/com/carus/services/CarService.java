@@ -82,6 +82,7 @@ public class CarService {
         entity.setLongitude(dto.getLongitude());
         entity.setDescription(dto.getDescription());
         entity.setAddress(dto.getAddress());
+        entity.setPrice(dto.getPrice());
         entity.setCarImage(dto.getCarImage());
 
         return entity;

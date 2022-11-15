@@ -32,7 +32,7 @@ public class CarDTO implements Serializable {
     private Long longitude;
     private String description;
     private String address;
-
+    private Double price;
     private List<CarImageEntity> carImage = new ArrayList<>(0);
 
     public CarDTO(CarEntity entity) {
@@ -52,6 +52,7 @@ public class CarDTO implements Serializable {
         this.longitude = entity.getLongitude();
         this.description = entity.getDescription();
         this.address = entity.getAddress();
+        this.price = entity.getPrice();
         this.carImage = entity.getCarImage();
     }
 
