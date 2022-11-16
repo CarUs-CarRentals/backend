@@ -40,6 +40,13 @@ public class RateCarService {
         return rateCarRepository.findAllByCarId(carId).stream().map(RateCarDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<RateCarDTO> findAllByUserUuid(String uuid) {
+        List<RateCarEntity> rateCar = rateCarRepository.findByUserUuid(uuid);
+        return rateCar.stream().map(RateCarDTO::new).collect(Collectors.toList());
+
+    }
+
     @Transactional(readOnly = true)
     public RateCarEntity findEntityById(Long id) {
         return rateCarRepository.findById(id).orElseThrow(() -> {
