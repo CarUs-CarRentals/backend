@@ -12,5 +12,8 @@ public interface RateCarRepository extends JpaRepository<RateCarEntity, Long> {
 
     @Query("select r from RateCarEntity r where r.car.id = ?1")
     List<RateCarEntity> findAllByCarId(Long carId);
+
+    @Query("select r from RateCarEntity r where r.user.uuid = ?1")
+    List<RateCarEntity> findByUserUuid(String userUuid);
 }
 

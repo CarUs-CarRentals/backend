@@ -4,4 +4,5 @@ INSERT INTO car (id, address, brand, category, description, doors, fuel, gear_sh
 INSERT INTO rate_user(id, date, description, rate, evaluator_user_uuid, rated_user_uuid) VALUES(1, '2022-08-08', 'Ótimo carro', 5.00, 'ebf85b35-a127-4e9a-860a-1aec6f56d1c1', 'ebf75b35-a127-4e9a-860a-1aec6f56d1c1');
 INSERT INTO rate_user(id, date, description, rate, evaluator_user_uuid, rated_user_uuid) VALUES(2, '2022-08-08', 'Bom carro', 4.00, 'ebf85b35-a127-4e9a-860a-1aec6f56d1c1', 'ebf75b35-a127-4e9a-860a-1aec6f56d1c1');
 INSERT INTO rental(id, address, is_review, latitude, location_date, longitude, price, return_date, status, car_id, user_uuid) VALUES(1, 'Rua Hermann Weege, 151 - Centro, Pomerode - SC, 89107-000, Brasil', 1, 51235154, '2019-03-31 22:32:07.000', 451234141, 25.00, '2019-03-31 22:32:07.000', 'RENTED', 1, 'ebf75b35-a127-4e9a-860a-1aec6f56d1c1');
-
+INSERT INTO rate_car(id, date, description, rate, car_id, location_id, user_uuid) VALUES(1, '2022-08-08', 'Belo carro', 5.0, 1, NULL, 'ebf85b35-a127-4e9a-860a-1aec6f56d1c1');
+INSERT INTO rate_car(id, date, description, rate, car_id, location_id, user_uuid) VALUES(2, '2022-08-08', 'Mais ou menos', 2.0, 1, NULL, 'ebf85b35-a127-4e9a-860a-1aec6f56d1c1');
