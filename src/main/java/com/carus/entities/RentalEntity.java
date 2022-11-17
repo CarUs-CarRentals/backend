@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,11 +39,11 @@ public class RentalEntity {
     @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private Double price;
 
-    @Column(nullable = false)
-    private Long latitude;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,8)")
+    private BigDecimal latitude;
 
-    @Column(nullable = false)
-    private Long longitude;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,8)")
+    private BigDecimal longitude;
 
     @Column(nullable = false)
     private String address;
