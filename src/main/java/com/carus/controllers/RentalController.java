@@ -9,34 +9,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/location")
+@RequestMapping("/api/rental")
 public class RentalController {
 
     @Autowired
     private RentalService rentalService;
 
-    @GetMapping(value = "/all")
+    @GetMapping("/all")
     public ResponseEntity<List<RentalDTO>> findAll() {
         return ResponseEntity.ok(rentalService.findAll());
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<RentalDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(rentalService.findById(id));
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping("/create")
     public ResponseEntity<RentalDTO> save(@RequestBody RentalDTO dto) {
         return ResponseEntity.ok(rentalService.save(dto));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         rentalService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<RentalDTO> update(@RequestBody RentalDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(rentalService.update(dto, id));
     }

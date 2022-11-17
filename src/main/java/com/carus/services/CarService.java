@@ -100,6 +100,7 @@ public class CarService {
         entity.setDescription(dto.getDescription());
         entity.setAddress(dto.getAddress());
         entity.setCarImages(dto.getCarImages());
+        entity.setPrice(dto.getPrice());
 
         return entity;
     }
