@@ -1,5 +1,6 @@
 package com.carus.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,12 +8,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "image")
 @Data
-public class CarImageEntity {
+public class ImageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
     @Column(nullable = false)
-    private String Url;
+    private String url;
 }
