@@ -20,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,11 +70,11 @@ public class CarEntity {
     @Column(nullable = false)
     private Integer trunk;
 
-    @Column(nullable = false)
-    private Long latitude;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,8)")
+    private BigDecimal latitude;
 
-    @Column(nullable = false)
-    private Long longitude;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,8)")
+    private BigDecimal longitude;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String description;
