@@ -1,7 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.CarEntity;
-import com.carus.entities.CarImageEntity;
+import com.carus.entities.ImageEntity;
 import com.carus.enums.ECategory;
 import com.carus.enums.EFuel;
 import com.carus.enums.EGear;
@@ -32,8 +32,9 @@ public class CarDTO implements Serializable {
     private Long longitude;
     private String description;
     private String address;
+
+    private List<ImageEntity> carImages = new ArrayList<>(0);
     private Double price;
-    private List<CarImageEntity> carImage = new ArrayList<>(0);
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
@@ -52,8 +53,8 @@ public class CarDTO implements Serializable {
         this.longitude = entity.getLongitude();
         this.description = entity.getDescription();
         this.address = entity.getAddress();
+        this.carImages = entity.getCarImages();
         this.price = entity.getPrice();
-        this.carImage = entity.getCarImage();
     }
 
 }
