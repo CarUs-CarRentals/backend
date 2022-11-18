@@ -41,9 +41,6 @@ public class UserEntity implements UserDetails {
     @Column(length = 11, unique = true)
     private String cpf;
 
-    @Column(length = 8, unique = true)
-    private String rg;
-
     @Column(length = 20)
     private String phone;
 

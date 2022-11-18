@@ -134,7 +134,6 @@ public class UserService implements UserDetailsService {
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setCpf(dto.getCpf());
-        entity.setRg(dto.getRg());
         entity.setPhone(dto.getPhone());
         entity.setGender(dto.getGender());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));

@@ -2,8 +2,9 @@ package com.carus.enums;
 
 public enum EFuel {
     GASOLINE,
-    ALCOHOL,
+    ETHANOL,
     DIESEL,
     ELETRIC,
-    HYBRID
+    HYBRID,
+    CNG
 }
