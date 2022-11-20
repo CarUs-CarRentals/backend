@@ -8,7 +8,6 @@ import com.carus.repositories.CarRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -37,9 +36,7 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public CarDTO findById(Long id) {
-        CarEntity entity = this.findEntityById(id);
-        Hibernate.initialize(entity.getCarImages());
-        return new CarDTO(entity);
+        return new CarDTO(this.findEntityById(id));
     }
 
     @Transactional(readOnly = true)
