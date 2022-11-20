@@ -1,6 +1,7 @@
 package com.carus.services;
 
 import com.carus.dto.CarDTO;
+import com.carus.dto.params.CarSearchParams;
 import com.carus.entities.CarEntity;
 import com.carus.entities.ImageEntity;
 import com.carus.repositories.CarRepository;
@@ -80,6 +81,10 @@ public class CarService {
     public List<CarDTO> getCarsByLoggedUser() {
         List<CarEntity> cars = carRepository.findCarsByUserUuid(userService.getLoggedUser().getUuid());
         return cars.stream().map(CarDTO::new).collect(Collectors.toList());
+    }
+
+    public List<CarDTO> filterCars(CarSearchParams searchParams) {
+        return carRepository.filterCars(searchParams).stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
     private CarEntity dtoToEntity(CarDTO dto) {

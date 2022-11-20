@@ -15,11 +15,11 @@ public class RateCarEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_RateCar_user"))
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_user_evaluator"))
     private UserEntity user;
 
     @OneToOne
-    @JoinColumn(name = "car_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_RateCar_car"))
+    @JoinColumn(name = "car_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_car_evaluated"))
     private CarEntity car;
 
     @OneToOne

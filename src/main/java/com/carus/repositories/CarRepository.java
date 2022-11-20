@@ -7,10 +7,9 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface CarRepository extends JpaRepository<CarEntity, Long>, QuerydslPredicateExecutor<CarEntity> {
+public interface CarRepository extends JpaRepository<CarEntity, Long>, QuerydslPredicateExecutor<CarEntity>, CarRepositoryCustom {
 
     @Query(value = "select * from car c where c.user_uuid = ?1", nativeQuery = true)
     List<CarEntity> findCarsByUserUuid(String userUuid);
