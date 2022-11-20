@@ -1,6 +1,9 @@
 package com.carus.controllers;
 
 import com.carus.dto.CarDTO;
+import com.carus.dto.params.CarSearchParams;
+import com.carus.enums.ECategory;
+import com.carus.enums.EGear;
 import com.carus.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,6 +50,19 @@ public class CarController {
     @GetMapping
     public ResponseEntity<List<CarDTO>> carsByLoggedUser() {
         return ResponseEntity.ok(carService.getCarsByLoggedUser());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CarDTO>> searchCars(@RequestParam(value = "gearShift", required = false) EGear gearShift,
+                                                   @RequestParam(value = "category", required = false) ECategory category,
+                                                   @RequestParam(value = "address", required = false) String address,
+                                                   @RequestParam(value = "brand", required = false) String brand,
+                                                   @RequestParam(value = "model", required = false) String model,
+                                                   @RequestParam(value = "year", required = false) Integer year,
+                                                   @RequestParam(value = "seats", required = false) Integer seats) {
+
+        CarSearchParams searchParams = new CarSearchParams(gearShift, category, address, brand, model, year, seats);
+        return ResponseEntity.ok(carService.filterCars(searchParams));
     }
 
     @PutMapping("/{id}")
