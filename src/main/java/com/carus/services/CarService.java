@@ -8,12 +8,12 @@ import com.carus.repositories.CarRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +37,9 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public CarDTO findById(Long id) {
-        return new CarDTO(this.findEntityById(id));
+        CarEntity entity = this.findEntityById(id);
+        Hibernate.initialize(entity.getCarImages());
+        return new CarDTO(entity);
     }
 
     @Transactional(readOnly = true)
@@ -85,9 +87,7 @@ public class CarService {
     }
 
     public List<CarDTO> filterCars(CarSearchParams searchParams) {
-        List<CarEntity> filtered = carRepository.filterCars(searchParams);
-        if (filtered == null || filtered.isEmpty()) return new ArrayList<>();
-        return filtered.stream().map(CarDTO::new).collect(Collectors.toList());
+        return carRepository.filterCars(searchParams).stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
     private CarEntity dtoToEntity(CarDTO dto) {
