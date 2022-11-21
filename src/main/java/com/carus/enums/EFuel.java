@@ -6,5 +6,6 @@ public enum EFuel {
     DIESEL,
     ELETRIC,
     HYBRID,
-    CNG
+    CNG,
+    FLEX
 }
