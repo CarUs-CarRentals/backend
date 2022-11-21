@@ -6,10 +6,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +42,7 @@ public class UserEntity implements UserDetails {
     @Column(length = 20)
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 60)
     private EGender gender;
 
