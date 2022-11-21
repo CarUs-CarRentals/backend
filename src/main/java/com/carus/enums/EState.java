@@ -27,5 +27,6 @@ public enum EState {
     SANTA_CATARINA,
     SAO_PAULO,
     SERGIPE,
-    TOCANTINS
+    TOCANTINS,
+    UNKNOWN
 }
