@@ -1,6 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.UserEntity;
+import com.carus.enums.EGender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class UserDTO {
     private String lastName;
     private String cpf;
     private String phone;
-    private String gender;
+    private EGender gender;
     private LocalDate memberSince;
     private String about;
     private String profileImageUrl;
