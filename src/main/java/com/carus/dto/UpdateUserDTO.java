@@ -1,5 +1,6 @@
 package com.carus.dto;
 
+import com.carus.enums.EGender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class UpdateUserDTO implements Serializable {
     private String cpf;
     private String rg;
     private String phone;
-    private String gender;
+    private EGender gender;
     private String password;
     private String about;
     private String profileImageUrl;

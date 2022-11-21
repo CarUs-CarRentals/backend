@@ -1,5 +1,6 @@
 package com.carus.entities;
 
+import com.carus.enums.EGender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,7 +46,7 @@ public class UserEntity implements UserDetails {
     private String phone;
 
     @Column(length = 60)
-    private String gender;
+    private EGender gender;
 
     @Column
     private String about = "";
