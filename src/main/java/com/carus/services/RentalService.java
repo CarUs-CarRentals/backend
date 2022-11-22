@@ -2,7 +2,7 @@ package com.carus.services;
 
 import com.carus.dto.RentalDTO;
 import com.carus.entities.RentalEntity;
-import com.carus.repositories.LocationRepository;
+import com.carus.repositories.RentalRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class RentalService {
 
     @Autowired
-    private LocationRepository locationRepository;
+    private RentalRepository rentalRepository;
 
     @Autowired
     private UserService userService;
@@ -29,20 +29,32 @@ public class RentalService {
 
     @Transactional(readOnly = true)
     public List<RentalDTO> findAll() {
-        return locationRepository.findAll().stream().map(RentalDTO::new).collect(Collectors.toList());
+        return rentalRepository.findAll().stream().map(RentalDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public RentalDTO findById(Long id) {
-        return new RentalDTO(locationRepository.findById(id).orElseThrow(() -> {
+        return new RentalDTO(rentalRepository.findById(id).orElseThrow(() -> {
             log.error("Entity with id {} not found", id);
             return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
         }));
     }
 
+    @Transactional(readOnly = true)
+    public List<RentalDTO> getRentalsByUser() {
+        List<RentalEntity> user = rentalRepository.findRentalsByUserUuid(userService.getLoggedUser().getUuid());
+        return user.stream().map(RentalDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<RentalDTO> getRentalsByCar(Long id) {
+        List<RentalEntity> cars = rentalRepository.findRentalsByCarId(id);
+        return cars.stream().map(RentalDTO::new).collect(Collectors.toList());
+    }
+
     @Transactional
     public RentalDTO save(RentalDTO dto) {
-        RentalEntity entity = locationRepository.save(this.dtoToEntity(dto));
+        RentalEntity entity = rentalRepository.save(this.dtoToEntity(dto));
         return new RentalDTO(entity);
     }
 
@@ -50,13 +62,13 @@ public class RentalService {
     public RentalDTO update(RentalDTO dto, Long id) {
         RentalEntity updated = this.dtoToEntity(dto);
         updated.setId(id);
-        return new RentalDTO(locationRepository.save(updated));
+        return new RentalDTO(rentalRepository.save(updated));
     }
 
     @Transactional
     public void deleteById(Long id) {
         try {
-            locationRepository.deleteById(id);
+            rentalRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
             log.error("Entity with id {} not found", id);
             throw new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));

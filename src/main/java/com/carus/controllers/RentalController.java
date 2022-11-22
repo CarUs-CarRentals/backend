@@ -25,6 +25,16 @@ public class RentalController {
         return ResponseEntity.ok(rentalService.findById(id));
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<RentalDTO>> rentalsByLoggedUser() {
+        return ResponseEntity.ok(rentalService.getRentalsByUser());
+    }
+
+    @GetMapping("/car/{id}")
+    public ResponseEntity<List<RentalDTO>> rentalsByCar(@PathVariable Long id) {
+        return ResponseEntity.ok(rentalService.getRentalsByCar(id));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<RentalDTO> save(@RequestBody RentalDTO dto) {
         return ResponseEntity.ok(rentalService.save(dto));
