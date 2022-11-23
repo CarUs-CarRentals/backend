@@ -1,6 +1,6 @@
 package com.carus.entities;
 
-import com.carus.enums.ELocationStatus;
+import com.carus.enums.ERentalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -50,7 +50,7 @@ public class RentalEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 11)
-    private ELocationStatus status;
+    private ERentalStatus status;
 
     @Column(nullable = false, columnDefinition = "BIT")
     private Boolean isReview = false;

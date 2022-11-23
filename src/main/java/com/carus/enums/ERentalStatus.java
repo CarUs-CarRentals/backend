@@ -1,9 +1,10 @@
 package com.carus.enums;
 
-public enum ELocationStatus {
+public enum ERentalStatus {
     IN_PROGRESS,
     RENTED,
     PENDING,
     LATE,
-    RESERVED
+    RESERVED,
+    REFUSED
 }

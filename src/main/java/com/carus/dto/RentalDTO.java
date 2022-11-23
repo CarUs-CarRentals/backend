@@ -1,7 +1,7 @@
 package com.carus.dto;
 
 import com.carus.entities.RentalEntity;
-import com.carus.enums.ELocationStatus;
+import com.carus.enums.ERentalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class RentalDTO {
     private BigDecimal latitude;
     private BigDecimal longitude;
     private String address;
-    private ELocationStatus status;
+    private ERentalStatus status;
     private Boolean isReview = false;
 
     public RentalDTO(RentalEntity entity) {
