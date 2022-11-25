@@ -19,6 +19,7 @@ public class RateUserDTO {
     private String evaluatedUser;
     private Double rate;
     private String description;
+    private Long rental;
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -29,6 +30,7 @@ public class RateUserDTO {
         this.evaluatedUser = entity.getEvaluatedUser().getUuid();
         this.rate = entity.getRate();
         this.description = entity.getDescription();
+        this.rental = entity.getRental().getId();
         this.date = entity.getDate();
     }
 }

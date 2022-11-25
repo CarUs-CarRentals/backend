@@ -3,6 +3,7 @@ package com.carus.services;
 import com.carus.dto.RateCarDTO;
 import com.carus.entities.RateCarEntity;
 import com.carus.repositories.RateCarRepository;
+import com.carus.repositories.RentalRepository;
 import com.carus.repositories.UserRepository;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
@@ -29,6 +30,9 @@ public class RateCarService {
 
     @Autowired
     private CarService carService;
+
+    @Autowired
+    private RentalRepository rentalRepository;
 
     @Transactional(readOnly = true)
     public List<RateCarDTO> findAll() {
@@ -90,6 +94,7 @@ public class RateCarService {
         entity.setCar(carService.findEntityById(dto.getCarId()));
         entity.setRate(dto.getRate());
         entity.setDescription(dto.getDescription());
+        entity.setRental(rentalRepository.findById(dto.getRental()).get());
         entity.setDate(dto.getDate());
 
         return entity;

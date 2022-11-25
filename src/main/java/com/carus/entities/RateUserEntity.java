@@ -22,6 +22,10 @@ public class RateUserEntity {
     @JoinColumn(name = "evaluator_user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_evaluator_user"))
     private UserEntity evaluatedUser;
 
+    @OneToOne
+    @JoinColumn(name = "rental_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_rental_id"), nullable = false)
+    private RentalEntity rental;
+
     @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private Double rate;
 
