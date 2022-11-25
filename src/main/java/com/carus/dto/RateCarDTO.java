@@ -20,6 +20,8 @@ public class RateCarDTO {
     private Double rate;
     private String description;
 
+    private Long rental;
+
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -30,6 +32,7 @@ public class RateCarDTO {
         this.carId = entity.getCar().getId();
         this.rate = entity.getRate();
         this.description = entity.getDescription();
+        this.rental = entity.getRental().getId();
         this.date = entity.getDate();
     }
 }

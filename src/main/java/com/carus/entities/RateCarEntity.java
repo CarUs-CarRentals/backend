@@ -23,8 +23,8 @@ public class RateCarEntity {
     private CarEntity car;
 
     @OneToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_location"))
-    private RentalEntity location;
+    @JoinColumn(name = "rental_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_rental"), nullable = false)
+    private RentalEntity rental;
 
     @Column(nullable = false, length = 10)
     private Double rate;
