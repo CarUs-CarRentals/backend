@@ -82,7 +82,7 @@ public class RentalService {
         RentalEntity entity = new RentalEntity();
         entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCar(carService.findEntityById(dto.getCar()));
-        entity.setLocationDate(dto.getLocationDate());
+        entity.setRentalDate(dto.getRentalDate());
         entity.setReturnDate(dto.getReturnDate());
         entity.setPrice(dto.getPrice());
         entity.setLatitude(dto.getLatitude());

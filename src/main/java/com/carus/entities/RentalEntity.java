@@ -27,12 +27,12 @@ public class RentalEntity {
     private CarEntity car;
 
     @JsonDeserialize
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @Column(nullable = false, columnDefinition = "DATETIME")
-    private LocalDateTime locationDate;
+    private LocalDateTime rentalDate;
 
     @JsonDeserialize
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime returnDate;
 
