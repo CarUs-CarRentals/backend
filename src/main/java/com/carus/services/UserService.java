@@ -57,6 +57,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private AuthenticationConfig authenticationConfig;
 
+    @Autowired
+    private AddressService addressService;
+
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
@@ -106,10 +109,8 @@ public class UserService implements UserDetailsService {
 
     public UserProfileDTO getUserProfile() {
         UserDTO user = this.getLoggedUserDTO();
-        AddressEntity address = addressRepository.findAddressByUserId(user.getUuid());
-        AddressDTO addressDTO = address != null ? new AddressDTO(address) : null;
         Long rateNumber = rateUserService.countRatesByUserId(user.getUuid());
-        return new UserProfileDTO(user, addressDTO, rateNumber);
+        return new UserProfileDTO(user, rateNumber);
     }
 
     protected UserEntity getLoggedUser() {
@@ -129,6 +130,8 @@ public class UserService implements UserDetailsService {
 
     public UserEntity updateDtoToEntity(UpdateUserDTO dto, String uuid) {
         UserEntity entity = this.findEntityByUuid(uuid);
+        AddressEntity address = addressService.dtoToEntity(dto.getAddress());
+        address.setId(dto.getAddress().getId());
         entity.setLogin(dto.getLogin());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
@@ -138,6 +141,7 @@ public class UserService implements UserDetailsService {
         entity.setGender(dto.getGender());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         entity.setAbout(dto.getAbout());
+        entity.setAddress(address);
         entity.setProfileImageUrl(dto.getProfileImageUrl());
         return entity;
     }

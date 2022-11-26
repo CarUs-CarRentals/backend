@@ -19,12 +19,12 @@ public class UserProfileDTO implements Serializable {
     private Long rateNumber = 0L;
     private AddressDTO address;
 
-    public UserProfileDTO(UserDTO user, AddressDTO address, Long rateNumber) {
+    public UserProfileDTO(UserDTO user, Long rateNumber) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.memberSince = user.getMemberSince();
         this.about = user.getAbout();
-        this.address = address;
+        this.address = user.getAddress();
         this.rateNumber = rateNumber;
     }
 }

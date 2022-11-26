@@ -46,6 +46,10 @@ public class UserEntity implements UserDetails {
     @Column(length = 60)
     private EGender gender;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_address", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_address_user"))
+    private AddressEntity address;
+
     @Column
     private String about = "";
 

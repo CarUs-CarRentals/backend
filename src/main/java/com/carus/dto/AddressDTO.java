@@ -12,22 +12,22 @@ import lombok.NoArgsConstructor;
 public class AddressDTO {
 
     private Long id;
-    private String user;
     private String cep;
     private EState state;
     private String city;
     private String neighborhood;
     private String street;
-    private int number;
+    private Integer number;
 
     public AddressDTO (AddressEntity entity) {
-        this.id = entity.getId();
-        this.user = entity.getUser().getUuid();
-        this.cep = entity.getCep();
-        this.state = entity.getState();
-        this.city = entity.getCity();
-        this.neighborhood = entity.getNeighborhood();
-        this.street = entity.getNeighborhood();
-        this.number = entity.getNumber();
+        if (entity != null) {
+            this.id = entity.getId();
+            this.cep = entity.getCep();
+            this.state = entity.getState();
+            this.city = entity.getCity();
+            this.neighborhood = entity.getNeighborhood();
+            this.street = entity.getStreet();
+            this.number = entity.getNumber();
+        }
     }
 }
