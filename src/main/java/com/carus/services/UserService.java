@@ -3,7 +3,6 @@ package com.carus.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
-import com.carus.dto.AddressDTO;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
@@ -73,7 +72,7 @@ public class UserService implements UserDetailsService {
     public UserEntity findEntityByUuid(String uuid) {
         return userRepository.findByUuid(uuid).orElseThrow(() -> {
             log.error("Entity with id {} not found", uuid);
-            return new EntityNotFoundException("Entity with id ".concat(uuid.toString()).concat(" not found"));
+            return new EntityNotFoundException("Entity with id ".concat(uuid).concat(" not found"));
         });
     }
 

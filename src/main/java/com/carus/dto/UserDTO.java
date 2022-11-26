@@ -1,6 +1,5 @@
 package com.carus.dto;
 
-import com.carus.entities.AddressEntity;
 import com.carus.entities.UserEntity;
 import com.carus.enums.EGender;
 import lombok.AllArgsConstructor;
@@ -38,7 +37,7 @@ public class UserDTO {
         this.gender = entity.getGender();
         this.memberSince = entity.getMemberSince();
         this.about = entity.getAbout();
-        this.address = new AddressDTO(entity.getAddress());
+        if (entity.getAddress() != null) this.address = new AddressDTO(entity.getAddress());
         this.profileImageUrl = entity.getProfileImageUrl();
     }
 
