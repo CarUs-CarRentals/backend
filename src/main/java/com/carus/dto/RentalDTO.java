@@ -20,10 +20,10 @@ public class RentalDTO {
     private String user;
     private Long car;
     @JsonDeserialize
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime locationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime rentalDate;
     @JsonDeserialize
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime returnDate;
     private Double price;
     private BigDecimal latitude;
@@ -36,7 +36,7 @@ public class RentalDTO {
         this.id = entity.getId();
         this.user = entity.getUser().getUuid();
         this.car = entity.getCar().getId();
-        this.locationDate = entity.getLocationDate();
+        this.rentalDate = entity.getRentalDate();
         this.returnDate = entity.getReturnDate();
         this.price = entity.getPrice();
         this.latitude = entity.getLatitude();

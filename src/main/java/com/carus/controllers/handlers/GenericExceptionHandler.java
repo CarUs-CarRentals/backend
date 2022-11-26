@@ -5,6 +5,7 @@ import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
 import com.carus.services.exceptions.TokenException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,7 +19,7 @@ public class GenericExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandartError> entityNotFound(EntityNotFoundException e, HttpServletRequest request) {
-        HttpStatus requestStatus = HttpStatus.NOT_FOUND;
+        HttpStatus requestStatus = HttpStatus.BAD_REQUEST;
         StandartError error = new StandartError();
         error.setTimestamp(Instant.now());
         error.setStatus(requestStatus.value());
@@ -56,6 +57,17 @@ public class GenericExceptionHandler {
         error.setTimestamp(Instant.now());
         error.setStatus(requestStatus.value());
         error.setError("Invalid token");
+        error.setMessage(e.getMessage());
+        return ResponseEntity.status(requestStatus).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandartError> integrityViolation(DataIntegrityViolationException e, HttpServletRequest request) {
+        HttpStatus requestStatus = HttpStatus.BAD_REQUEST;
+        StandartError error = new StandartError();
+        error.setTimestamp(Instant.now());
+        error.setStatus(requestStatus.value());
+        error.setError("Integrity violation");
         error.setMessage(e.getMessage());
         return ResponseEntity.status(requestStatus).body(error);
     }
