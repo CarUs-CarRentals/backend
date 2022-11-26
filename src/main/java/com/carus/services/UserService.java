@@ -129,8 +129,7 @@ public class UserService implements UserDetailsService {
 
     public UserEntity updateDtoToEntity(UpdateUserDTO dto, String uuid) {
         UserEntity entity = this.findEntityByUuid(uuid);
-        AddressEntity address = addressService.dtoToEntity(dto.getAddress());
-        address.setId(dto.getAddress().getId());
+        AddressEntity address = null;
         entity.setLogin(dto.getLogin());
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
@@ -140,6 +139,10 @@ public class UserService implements UserDetailsService {
         entity.setGender(dto.getGender());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         entity.setAbout(dto.getAbout());
+        if (dto.getAddress() != null) {
+            address = addressService.dtoToEntity(dto.getAddress());
+            address.setId(dto.getAddress().getId());
+        }
         entity.setAddress(address);
         entity.setProfileImageUrl(dto.getProfileImageUrl());
         return entity;
