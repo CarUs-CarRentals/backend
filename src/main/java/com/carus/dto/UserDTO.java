@@ -23,6 +23,7 @@ public class UserDTO {
     private EGender gender;
     private LocalDate memberSince;
     private String about;
+    private AddressDTO address;
     private String profileImageUrl;
 
     public UserDTO(UserEntity entity) {
@@ -36,6 +37,7 @@ public class UserDTO {
         this.gender = entity.getGender();
         this.memberSince = entity.getMemberSince();
         this.about = entity.getAbout();
+        if (entity.getAddress() != null) this.address = new AddressDTO(entity.getAddress());
         this.profileImageUrl = entity.getProfileImageUrl();
     }
 

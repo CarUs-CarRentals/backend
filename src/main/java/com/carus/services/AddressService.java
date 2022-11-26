@@ -23,9 +23,6 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
-    @Autowired
-    private UserService userService;
-
     @Transactional
     public AddressDTO create(AddressEntity address) {
         return new AddressDTO(addressRepository.save(address));
@@ -38,11 +35,6 @@ public class AddressService {
     @Transactional(readOnly = true)
     public List<AddressDTO> findAll() {
         return addressRepository.findAll().stream().map(AddressDTO::new).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public AddressDTO findByUserUuid(String userUuid) {
-        return new AddressDTO(addressRepository.findAddressByUserId(userUuid));
     }
 
     @Transactional(readOnly = true)
@@ -84,9 +76,8 @@ public class AddressService {
         }
     }
 
-    private AddressEntity dtoToEntity(AddressDTO dto) {
+    public AddressEntity dtoToEntity(AddressDTO dto) {
         AddressEntity entity = new AddressEntity();
-        entity.setUser(userService.findEntityByUuid(dto.getUser()));
         entity.setCep(dto.getCep());
         entity.setState(dto.getState());
         entity.setCity(dto.getCity());

@@ -22,5 +22,6 @@ public class UpdateUserDTO implements Serializable {
     private EGender gender;
     private String password;
     private String about;
+    private AddressDTO address;
     private String profileImageUrl;
 }

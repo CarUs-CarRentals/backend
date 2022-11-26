@@ -14,10 +14,6 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(name = "fk_address_user"))
-    private UserEntity user;
-
     @Column(nullable = false, length = 15)
     private String cep;
 
@@ -35,5 +31,5 @@ public class AddressEntity {
     private String street;
 
     @Column(nullable = false, length = 5)
-    private int number;
+    private Integer number;
 }
