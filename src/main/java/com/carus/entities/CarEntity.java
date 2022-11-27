@@ -90,4 +90,7 @@ public class CarEntity {
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<ImageEntity> carImages = new ArrayList<>(0);
+
+    @Column(nullable = false, columnDefinition = "BIT")
+    private Boolean active = true;
 }

@@ -36,6 +36,7 @@ public class CarDTO implements Serializable {
 
     private List<ImageEntity> carImages = new ArrayList<>(0);
     private Double price;
+    private Boolean active = true;
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
@@ -56,6 +57,7 @@ public class CarDTO implements Serializable {
         this.address = entity.getAddress();
         this.carImages = entity.getCarImages();
         this.price = entity.getPrice();
+        this.active = entity.getActive();
     }
 
 }

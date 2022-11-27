@@ -69,4 +69,10 @@ public class CarController {
     public ResponseEntity<CarDTO> update(@RequestBody CarDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(carService.update(dto, id));
     }
+
+    @PostMapping("/inactivate/{id}")
+    public ResponseEntity<Void> inactivateCar(@PathVariable Long id) {
+        carService.inactivateCar(id);
+        return ResponseEntity.ok().build();
+    }
 }

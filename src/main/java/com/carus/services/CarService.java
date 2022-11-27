@@ -87,6 +87,10 @@ public class CarService {
         return carRepository.filterCars(searchParams).stream().map(CarDTO::new).collect(Collectors.toList());
     }
 
+    public void inactivateCar(Long id) {
+        carRepository.inactivateCar(id);
+    }
+
     private CarEntity dtoToEntity(CarDTO dto) {
         CarEntity entity = new CarEntity();
         entity.setBrand(dto.getBrand());
@@ -106,6 +110,7 @@ public class CarService {
         entity.setAddress(dto.getAddress());
         entity.setCarImages(dto.getCarImages());
         entity.setPrice(dto.getPrice());
+        entity.setActive(dto.getActive());
 
         return entity;
     }

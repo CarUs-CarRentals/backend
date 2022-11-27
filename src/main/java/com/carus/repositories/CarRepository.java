@@ -13,4 +13,7 @@ public interface CarRepository extends JpaRepository<CarEntity, Long>, QuerydslP
 
     @Query(value = "select * from car c where c.user_uuid = ?1", nativeQuery = true)
     List<CarEntity> findCarsByUserUuid(String userUuid);
+
+    @Query(value = "update car set active = 0 where id = ?1", nativeQuery = true)
+    void inactivateCar(Long id);
 }
