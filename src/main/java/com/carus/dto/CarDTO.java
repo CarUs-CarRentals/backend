@@ -36,7 +36,6 @@ public class CarDTO implements Serializable {
 
     private List<ImageEntity> carImages = new ArrayList<>(0);
     private Double price;
-
     private Boolean active = true;
 
     public CarDTO(CarEntity entity) {
