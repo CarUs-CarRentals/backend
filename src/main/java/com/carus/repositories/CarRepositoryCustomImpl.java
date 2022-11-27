@@ -31,6 +31,7 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
         whereModelLike(query, searchParams.getModel());
         whereGearShiftIs(query, searchParams.getGearShift());
         whereSeatsNumberIs(query, searchParams.getSeats());
+        query.where(carEntity.active.eq(true));
 
         return query.fetch();
     }
