@@ -53,6 +53,9 @@ public class RentalEntity {
     private ERentalStatus status;
 
     @Column(nullable = false, columnDefinition = "BIT")
-    private Boolean isReview = false;
+    private Boolean isReviewCar = false;
+
+    @Column(nullable = false, columnDefinition = "BIT")
+    private Boolean isReviewUser = false;
 
 }

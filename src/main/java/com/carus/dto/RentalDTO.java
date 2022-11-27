@@ -30,7 +30,8 @@ public class RentalDTO {
     private BigDecimal longitude;
     private String address;
     private ERentalStatus status;
-    private Boolean isReview = false;
+    private Boolean isReviewCar = false;
+    private Boolean isReviewUser = false;
 
     public RentalDTO(RentalEntity entity) {
         this.id = entity.getId();
@@ -43,6 +44,7 @@ public class RentalDTO {
         this.longitude = entity.getLongitude();
         this.address = entity.getAddress();
         this.status = entity.getStatus();
-        this.isReview = entity.getIsReview();
+        this.isReviewCar = entity.getIsReviewCar();
+        this.isReviewUser = entity.getIsReviewUser();
     }
 }
