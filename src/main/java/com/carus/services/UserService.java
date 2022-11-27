@@ -3,6 +3,7 @@ package com.carus.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
+import com.carus.config.UserDataConfig;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
 import com.carus.dto.UserDTO;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -55,6 +56,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AuthenticationConfig authenticationConfig;
+
+    @Autowired
+    private UserDataConfig userDataConfig;
 
     @Autowired
     private AddressService addressService;
@@ -79,7 +83,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDTO create(RegisterUserDTO user) {
         try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(encoder.encode(user.getPassword()));
             UserEntity entity = registerDtoToEntity(user);
             return new UserDTO(userRepository.save(entity));
         } catch (DataIntegrityViolationException constraintException) {
@@ -131,7 +135,7 @@ public class UserService implements UserDetailsService {
         UserEntity entity = this.findEntityByUuid(uuid);
         AddressEntity address = null;
         if (dto.getLogin() != null) entity.setLogin(dto.getLogin());
-        if (dto.getPassword() != null) entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (dto.getPassword() != null) entity.setPassword(encoder.encode(dto.getPassword()));
         entity.setEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
@@ -159,6 +163,7 @@ public class UserService implements UserDetailsService {
         entity.setRefreshToken(this.generateRefreshToken(entity.getLogin()));
         entity.setRefreshTokenExpiration(LocalDateTime.now().plusYears(1));
         entity.setMemberSince(LocalDate.now());
+        entity.setProfileImageUrl(userDataConfig.getProfileImageUrl());
         return entity;
     }
 
