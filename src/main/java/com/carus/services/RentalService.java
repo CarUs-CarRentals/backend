@@ -89,8 +89,7 @@ public class RentalService {
         entity.setLongitude(dto.getLongitude());
         entity.setAddress(dto.getAddress());
         entity.setStatus(dto.getStatus());
-        entity.setIsReviewCar(dto.getIsReviewCar());
-        entity.setIsReviewUser(dto.getIsReviewUser());
+        entity.setIsReview(dto.getIsReview());
 
         return entity;
     }
