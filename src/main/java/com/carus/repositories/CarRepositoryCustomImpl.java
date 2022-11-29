@@ -11,7 +11,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-import java.math.BigDecimal;
 import java.util.List;
 
 public class CarRepositoryCustomImpl implements CarRepositoryCustom {
