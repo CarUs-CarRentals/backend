@@ -15,4 +15,7 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
 
     @Query(value = "select * from rental c where c.car_id = ?1", nativeQuery = true)
     List<RentalEntity> findRentalsByCarId(Long carId);
+
+    @Query(value = "select count(*) from rental r where r.car_id = ?1", nativeQuery = true)
+    Long countRentalsByCarId(Long id);
 }
