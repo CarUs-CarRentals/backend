@@ -5,6 +5,7 @@ import com.carus.dto.params.CarSearchParams;
 import com.carus.entities.CarEntity;
 import com.carus.entities.ImageEntity;
 import com.carus.repositories.CarRepository;
+import com.carus.repositories.RentalRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
 import lombok.extern.log4j.Log4j2;
@@ -22,10 +23,10 @@ public class CarService {
 
     @Autowired
     private CarRepository carRepository;
-
+    @Autowired
+    private RentalRepository rentalRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private ImageService imageService;
 
@@ -36,7 +37,8 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public CarDTO findById(Long id) {
-        return new CarDTO(this.findEntityById(id));
+        CarDTO carDTO = new CarDTO(this.findEntityById(id), this.getRateCarAverage(id), rentalRepository.countRentalsByCarId(id));
+        return carDTO;
     }
 
     @Transactional(readOnly = true)
@@ -45,6 +47,10 @@ public class CarService {
             log.error("Entity with id {} not found", id);
             return new EntityNotFoundException("Entity with id ".concat(id.toString()).concat(" not found"));
         });
+    }
+    @Transactional
+    public Double getRateCarAverage(Long id) {
+        return carRepository.rateCarAverage(id);
     }
 
     @Transactional

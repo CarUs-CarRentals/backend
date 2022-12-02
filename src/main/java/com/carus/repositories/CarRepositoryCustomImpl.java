@@ -3,6 +3,7 @@ package com.carus.repositories;
 import com.carus.dto.params.CarSearchParams;
 import com.carus.entities.CarEntity;
 import com.carus.entities.QCarEntity;
+import com.carus.entities.QRateCarEntity;
 import com.carus.enums.ECategory;
 import com.carus.enums.EGear;
 import com.querydsl.core.util.StringUtils;
@@ -18,6 +19,7 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
     private EntityManager entityManager;
 
     private final QCarEntity carEntity = QCarEntity.carEntity;
+    private final QRateCarEntity rateCarEntity = QRateCarEntity.rateCarEntity;
 
     @Override
     public List<CarEntity> filterCars(CarSearchParams searchParams) {
@@ -63,5 +65,14 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
 
     private void whereSeatsNumberIs(JPAQuery<CarEntity> query, Integer seats) {
         if (seats != null) query.where(carEntity.seats.eq(seats));
+    }
+
+    @Override
+    public Double rateCarAverage(Long id) {
+        JPAQuery<Double> query = new JPAQuery<>(entityManager);
+        query.select(rateCarEntity.rate.avg()).from(rateCarEntity);
+
+        query.where(rateCarEntity.car.id.eq(id));
+        return query.fetchFirst();
     }
 }

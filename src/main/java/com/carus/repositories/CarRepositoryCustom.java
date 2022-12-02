@@ -8,4 +8,6 @@ import java.util.List;
 public interface CarRepositoryCustom {
 
     List<CarEntity> filterCars(CarSearchParams searchParams);
+
+    Double rateCarAverage(Long id);
 }

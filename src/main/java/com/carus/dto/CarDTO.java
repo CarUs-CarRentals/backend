@@ -37,6 +37,8 @@ public class CarDTO implements Serializable {
     private List<ImageEntity> carImages = new ArrayList<>(0);
     private Double price;
     private Boolean active = true;
+    private Double rateCarAverage;
+    private Long qtCarRentals;
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
@@ -58,6 +60,30 @@ public class CarDTO implements Serializable {
         this.carImages = entity.getCarImages();
         this.price = entity.getPrice();
         this.active = entity.getActive();
+    }
+
+    public CarDTO(CarEntity entity, Double rateCarAverage, Long qtCarRentals) {
+        this.id = entity.getId();
+        this.user = entity.getUser().getUuid();
+        this.brand = entity.getBrand();
+        this.model = entity.getModel();
+        this.year = entity.getYear();
+        this.plate = entity.getPlate();
+        this.fuel = entity.getFuel();
+        this.gearShift = entity.getGearShift();
+        this.category = entity.getCategory();
+        this.doors = entity.getDoors();
+        this.seats = entity.getSeats();
+        this.trunk = entity.getTrunk();
+        this.latitude = entity.getLatitude();
+        this.longitude = entity.getLongitude();
+        this.description = entity.getDescription();
+        this.address = entity.getAddress();
+        this.carImages = entity.getCarImages();
+        this.price = entity.getPrice();
+        this.active = entity.getActive();
+        if (rateCarAverage != null) this.rateCarAverage = rateCarAverage;
+        if (qtCarRentals != null) this.qtCarRentals = qtCarRentals;
     }
 
 }
