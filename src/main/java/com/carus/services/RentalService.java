@@ -42,16 +42,23 @@ public class RentalService {
         }));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<RentalDTO> getRentalsByUser() {
-        List<RentalEntity> user = rentalRepository.findRentalsByUserUuid(userService.getLoggedUser().getUuid());
-        return user.stream().map(RentalDTO::new).collect(Collectors.toList());
+        List<RentalEntity> rentals = rentalRepository.findRentalsByUserUuid(userService.getLoggedUser().getUuid());
+        List<RentalDTO> dtos = rentals.stream().map(rentalEntity -> {
+            if (isLate(rentalEntity)) {
+                rentalEntity.setStatus(ERentalStatus.LATE);
+                rentalEntity = rentalRepository.save(rentalEntity);
+            }
+            return new RentalDTO(rentalEntity);
+        }).collect(Collectors.toList());
+        return dtos;
     }
 
     @Transactional(readOnly = true)
     public List<RentalDTO> getRentalsByCar(Long id) {
-        List<RentalEntity> cars = rentalRepository.findRentalsByCarId(id);
-        return cars.stream().map(RentalDTO::new).collect(Collectors.toList());
+        List<RentalEntity> rentals = rentalRepository.findRentalsByCarId(id);
+        return rentals.stream().map(RentalDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -62,7 +69,6 @@ public class RentalService {
 
     @Transactional
     public RentalDTO update(RentalDTO dto, Long id) {
-        if (isLate(dto)) dto.setStatus(ERentalStatus.LATE);
         RentalEntity updated = this.dtoToEntity(dto);
         updated.setId(id);
         return new RentalDTO(rentalRepository.save(updated));
@@ -81,8 +87,8 @@ public class RentalService {
         }
     }
 
-    public boolean isLate(RentalDTO rental) {
-        return ERentalStatus.RENTED.equals(rental.getStatus())
+    public boolean isLate(RentalEntity rental) {
+        return ERentalStatus.IN_PROGRESS.equals(rental.getStatus())
                 && LocalDateTime.now().isAfter(rental.getReturnDate());
     }
 
