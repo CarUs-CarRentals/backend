@@ -1,13 +1,15 @@
 package com.carus.repositories;
 
+import com.carus.dto.CarDTO;
 import com.carus.dto.params.CarSearchParams;
-import com.carus.entities.CarEntity;
 
 import java.util.List;
 
 public interface CarRepositoryCustom {
 
-    List<CarEntity> filterCars(CarSearchParams searchParams);
+    List<CarDTO> filterCars(CarSearchParams searchParams);
 
-    Double rateCarAverage(Long id);
+    Double rateCarAverage(Long carId);
+
+    Integer qtCarRentals(Long carId);
 }

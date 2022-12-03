@@ -19,6 +19,7 @@ public class UserProfileDTO implements Serializable {
     private Long rateNumber = 0L;
     private AddressDTO address;
     private CnhDTO cnh;
+    private String profileImageUrl;
 
     public UserProfileDTO(UserDTO user, Long rateNumber, CnhDTO cnh) {
         this.firstName = user.getFirstName();
@@ -27,6 +28,7 @@ public class UserProfileDTO implements Serializable {
         this.about = user.getAbout();
         this.address = user.getAddress();
         this.rateNumber = rateNumber;
+        this.profileImageUrl = user.getProfileImageUrl();
         this.cnh = cnh;
     }
 }

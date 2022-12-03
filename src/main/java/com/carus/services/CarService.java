@@ -90,7 +90,7 @@ public class CarService {
     }
 
     public List<CarDTO> filterCars(CarSearchParams searchParams) {
-        return carRepository.filterCars(searchParams).stream().map(CarDTO::new).collect(Collectors.toList());
+        return carRepository.filterCars(searchParams);
     }
 
     public void inactivateCar(Long id) {
