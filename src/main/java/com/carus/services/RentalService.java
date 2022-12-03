@@ -2,6 +2,7 @@ package com.carus.services;
 
 import com.carus.dto.RentalDTO;
 import com.carus.entities.RentalEntity;
+import com.carus.enums.ERentalStatus;
 import com.carus.repositories.RentalRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
@@ -11,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +62,7 @@ public class RentalService {
 
     @Transactional
     public RentalDTO update(RentalDTO dto, Long id) {
+        if (isLate(dto)) dto.setStatus(ERentalStatus.LATE);
         RentalEntity updated = this.dtoToEntity(dto);
         updated.setId(id);
         return new RentalDTO(rentalRepository.save(updated));
@@ -76,6 +79,11 @@ public class RentalService {
             log.error(ex.getMessage());
             throw new InternalServerErrorException("An internal server error has occurred, please try again later");
         }
+    }
+
+    public boolean isLate(RentalDTO rental) {
+        return ERentalStatus.RENTED.equals(rental.getStatus())
+                && LocalDateTime.now().isAfter(rental.getReturnDate());
     }
 
     private RentalEntity dtoToEntity(RentalDTO dto) {
