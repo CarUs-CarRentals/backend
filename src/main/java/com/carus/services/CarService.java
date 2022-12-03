@@ -32,7 +32,11 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public List<CarDTO> findAll() {
-        return carRepository.findAll().stream().map(CarDTO::new).collect(Collectors.toList());
+        return carRepository.findAll().stream().map(carEntity -> {
+            Double rateAverage = carRepository.rateCarAverage(carEntity.getId());
+            Long qtRentals = rentalRepository.countRentalsByCarId(carEntity.getId());
+            return new CarDTO(carEntity, rateAverage, qtRentals);
+        }).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -86,16 +90,19 @@ public class CarService {
     @Transactional(readOnly = true)
     public List<CarDTO> getCarsByLoggedUser() {
         List<CarEntity> cars = carRepository.findCarsByUserUuid(userService.getLoggedUser().getUuid());
-        return cars.stream().map(CarDTO::new).collect(Collectors.toList());
+        return cars.stream().map(carEntity -> {
+            Double rateAverage = carRepository.rateCarAverage(carEntity.getId());
+            Long qtRentals = rentalRepository.countRentalsByCarId(carEntity.getId());
+            return new CarDTO(carEntity, rateAverage, qtRentals);
+        }).collect(Collectors.toList());
     }
 
     public List<CarDTO> filterCars(CarSearchParams searchParams) {
-        List<CarDTO> dtos = carRepository.filterCars(searchParams).stream().map(carEntity -> {
-            CarDTO dto = new CarDTO(carEntity, carRepository.rateCarAverage(carEntity.getId()), rentalRepository.countRentalsByCarId(carEntity.getId()));
-            return dto;
+        return carRepository.filterCars(searchParams).stream().map(carEntity -> {
+            Double rateAverage = carRepository.rateCarAverage(carEntity.getId());
+            Long qtRentals = rentalRepository.countRentalsByCarId(carEntity.getId());
+            return new CarDTO(carEntity, rateAverage, qtRentals);
         }).collect(Collectors.toList());
-
-        return dtos;
     }
 
     public void inactivateCar(Long id) {
