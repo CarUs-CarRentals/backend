@@ -90,7 +90,12 @@ public class CarService {
     }
 
     public List<CarDTO> filterCars(CarSearchParams searchParams) {
-        return carRepository.filterCars(searchParams);
+        List<CarDTO> dtos = carRepository.filterCars(searchParams).stream().map(carEntity -> {
+            CarDTO dto = new CarDTO(carEntity, carRepository.rateCarAverage(carEntity.getId()), rentalRepository.countRentalsByCarId(carEntity.getId()));
+            return dto;
+        }).collect(Collectors.toList());
+
+        return dtos;
     }
 
     public void inactivateCar(Long id) {

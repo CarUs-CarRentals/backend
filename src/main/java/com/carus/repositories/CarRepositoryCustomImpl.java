@@ -1,13 +1,12 @@
 package com.carus.repositories;
 
-import com.carus.dto.CarDTO;
 import com.carus.dto.params.CarSearchParams;
+import com.carus.entities.CarEntity;
 import com.carus.entities.QCarEntity;
 import com.carus.entities.QRateCarEntity;
 import com.carus.entities.QRentalEntity;
 import com.carus.enums.ECategory;
 import com.carus.enums.EGear;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,36 +25,10 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
     private final QRentalEntity rentalEntity = QRentalEntity.rentalEntity;
 
     @Override
-    public List<CarDTO> filterCars(CarSearchParams searchParams) {
-        JPAQuery<CarDTO> query = new JPAQuery<>(entityManager);
-        query.select(
-                Projections.bean(CarDTO.class),
-                carEntity.id,
-                carEntity.brand,
-                carEntity.model,
-                carEntity.category,
-                carEntity.description,
-                carEntity.fuel,
-                carEntity.doors,
-                carEntity.gearShift,
-                carEntity.trunk,
-                carEntity.plate,
-                carEntity.year,
-                carEntity.seats,
-                carEntity.price,
-                carEntity.latitude,
-                carEntity.longitude,
-                carEntity.address,
-                carEntity.user,
-                carEntity.active,
-                carEntity.carImages,
-                rentalEntity.count().as("qtCarRentals"),
-                rateCarEntity.rate.avg().as("rateCarAverage")
-        );
-
+    public List<CarEntity> filterCars(CarSearchParams searchParams) {
+        JPAQuery<CarEntity> query = new JPAQuery<>(entityManager);
+        query.select(carEntity);
         query.from(carEntity);
-        query.leftJoin(rentalEntity).on(rentalEntity.car.id.eq(carEntity.id));
-        query.leftJoin(rateCarEntity).on(rateCarEntity.car.id.eq(carEntity.id));
         whereYearIs(query, searchParams.getYear());
         whereAddressLike(query, searchParams.getAddress());
         whereBrandLike(query, searchParams.getBrand());
@@ -69,31 +42,31 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
     }
 
     // Filters
-    private void whereGearShiftIs(JPAQuery<CarDTO> query, EGear gear) {
+    private void whereGearShiftIs(JPAQuery<CarEntity> query, EGear gear) {
         if (gear != null) query.where(carEntity.gearShift.eq(gear));
     }
 
-    private void whereCategoryIs(JPAQuery<CarDTO> query, ECategory category) {
+    private void whereCategoryIs(JPAQuery<CarEntity> query, ECategory category) {
         if (category != null) query.where(carEntity.category.eq(category));
     }
 
-    private void whereAddressLike(JPAQuery<CarDTO> query, String address) {
+    private void whereAddressLike(JPAQuery<CarEntity> query, String address) {
         if (!StringUtils.isNullOrEmpty(address)) query.where(carEntity.address.like("%" + address + "%"));
     }
 
-    private void whereBrandLike(JPAQuery<CarDTO> query, String brand) {
+    private void whereBrandLike(JPAQuery<CarEntity> query, String brand) {
         if (!StringUtils.isNullOrEmpty(brand)) query.where(carEntity.brand.like("%" + brand + "%"));
     }
 
-    private void whereModelLike(JPAQuery<CarDTO> query, String model) {
+    private void whereModelLike(JPAQuery<CarEntity> query, String model) {
         if (!StringUtils.isNullOrEmpty(model)) query.where(carEntity.model.like("%" + model + "%"));
     }
 
-    private void whereYearIs(JPAQuery<CarDTO> query, Integer year) {
+    private void whereYearIs(JPAQuery<CarEntity> query, Integer year) {
         if (year != null) query.where(carEntity.year.eq(year));
     }
 
-    private void whereSeatsNumberIs(JPAQuery<CarDTO> query, Integer seats) {
+    private void whereSeatsNumberIs(JPAQuery<CarEntity> query, Integer seats) {
         if (seats != null) query.where(carEntity.seats.eq(seats));
     }
 
@@ -104,15 +77,5 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
 
         query.where(rateCarEntity.car.id.eq(carId));
         return query.fetchFirst();
-    }
-
-    @Override
-    public Integer qtCarRentals(Long carId) {
-        JPAQuery<Integer> query = new JPAQuery<>(entityManager);
-        query.select(rentalEntity.count());
-        query.from(rentalEntity);
-        query.where(rentalEntity.car.id.eq(carId));
-
-        return query.fetchOne();
     }
 }
