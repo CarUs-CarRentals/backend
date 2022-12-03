@@ -2,6 +2,7 @@ package com.carus.services;
 
 import com.carus.dto.RentalDTO;
 import com.carus.entities.RentalEntity;
+import com.carus.enums.ERentalStatus;
 import com.carus.repositories.RentalRepository;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
@@ -11,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,16 +42,23 @@ public class RentalService {
         }));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<RentalDTO> getRentalsByUser() {
-        List<RentalEntity> user = rentalRepository.findRentalsByUserUuid(userService.getLoggedUser().getUuid());
-        return user.stream().map(RentalDTO::new).collect(Collectors.toList());
+        List<RentalEntity> rentals = rentalRepository.findRentalsByUserUuid(userService.getLoggedUser().getUuid());
+        List<RentalDTO> dtos = rentals.stream().map(rentalEntity -> {
+            if (isLate(rentalEntity)) {
+                rentalEntity.setStatus(ERentalStatus.LATE);
+                rentalEntity = rentalRepository.save(rentalEntity);
+            }
+            return new RentalDTO(rentalEntity);
+        }).collect(Collectors.toList());
+        return dtos;
     }
 
     @Transactional(readOnly = true)
     public List<RentalDTO> getRentalsByCar(Long id) {
-        List<RentalEntity> cars = rentalRepository.findRentalsByCarId(id);
-        return cars.stream().map(RentalDTO::new).collect(Collectors.toList());
+        List<RentalEntity> rentals = rentalRepository.findRentalsByCarId(id);
+        return rentals.stream().map(RentalDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -76,6 +85,11 @@ public class RentalService {
             log.error(ex.getMessage());
             throw new InternalServerErrorException("An internal server error has occurred, please try again later");
         }
+    }
+
+    public boolean isLate(RentalEntity rental) {
+        return ERentalStatus.IN_PROGRESS.equals(rental.getStatus())
+                && LocalDateTime.now().isAfter(rental.getReturnDate());
     }
 
     private RentalEntity dtoToEntity(RentalDTO dto) {
