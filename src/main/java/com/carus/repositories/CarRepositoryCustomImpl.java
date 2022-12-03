@@ -4,6 +4,7 @@ import com.carus.dto.params.CarSearchParams;
 import com.carus.entities.CarEntity;
 import com.carus.entities.QCarEntity;
 import com.carus.entities.QRateCarEntity;
+import com.carus.entities.QRentalEntity;
 import com.carus.enums.ECategory;
 import com.carus.enums.EGear;
 import com.querydsl.core.util.StringUtils;
@@ -21,11 +22,13 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
     private final QCarEntity carEntity = QCarEntity.carEntity;
     private final QRateCarEntity rateCarEntity = QRateCarEntity.rateCarEntity;
 
+    private final QRentalEntity rentalEntity = QRentalEntity.rentalEntity;
+
     @Override
     public List<CarEntity> filterCars(CarSearchParams searchParams) {
         JPAQuery<CarEntity> query = new JPAQuery<>(entityManager);
-        query.select(carEntity).from(carEntity);
-
+        query.select(carEntity);
+        query.from(carEntity);
         whereYearIs(query, searchParams.getYear());
         whereAddressLike(query, searchParams.getAddress());
         whereBrandLike(query, searchParams.getBrand());
@@ -68,11 +71,11 @@ public class CarRepositoryCustomImpl implements CarRepositoryCustom {
     }
 
     @Override
-    public Double rateCarAverage(Long id) {
+    public Double rateCarAverage(Long carId) {
         JPAQuery<Double> query = new JPAQuery<>(entityManager);
         query.select(rateCarEntity.rate.avg()).from(rateCarEntity);
 
-        query.where(rateCarEntity.car.id.eq(id));
+        query.where(rateCarEntity.car.id.eq(carId));
         return query.fetchFirst();
     }
 }

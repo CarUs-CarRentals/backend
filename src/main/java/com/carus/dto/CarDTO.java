@@ -37,8 +37,8 @@ public class CarDTO implements Serializable {
     private List<ImageEntity> carImages = new ArrayList<>(0);
     private Double price;
     private Boolean active = true;
-    private Double rateCarAverage;
-    private Long qtCarRentals;
+    private Double rateCarAverage = 0.0;
+    private Long qtCarRentals = 0L;
 
     public CarDTO(CarEntity entity) {
         this.id = entity.getId();
