@@ -18,13 +18,15 @@ public class UserProfileDTO implements Serializable {
     private String about;
     private Long rateNumber = 0L;
     private AddressDTO address;
+    private CnhDTO cnh;
 
-    public UserProfileDTO(UserDTO user, Long rateNumber) {
+    public UserProfileDTO(UserDTO user, Long rateNumber, CnhDTO cnh) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.memberSince = user.getMemberSince();
         this.about = user.getAbout();
         this.address = user.getAddress();
         this.rateNumber = rateNumber;
+        this.cnh = cnh;
     }
 }

@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.carus.config.AuthenticationConfig;
 import com.carus.config.UserDataConfig;
+import com.carus.dto.CnhDTO;
 import com.carus.dto.RegisterUserDTO;
 import com.carus.dto.UpdateUserDTO;
+import com.carus.dto.UserCompleteDTO;
 import com.carus.dto.UserDTO;
 import com.carus.dto.UserProfileDTO;
 import com.carus.entities.AddressEntity;
@@ -63,13 +65,18 @@ public class UserService implements UserDetailsService {
     @Autowired
     private AddressService addressService;
 
+    @Autowired
+    private CnhService cnhService;
+
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public UserDTO findByUuid(String uuid) {
-        return new UserDTO(this.findEntityByUuid(uuid));
+        UserEntity user = this.findEntityByUuid(uuid);
+        CnhDTO cnh = cnhService.findByUserUuid(uuid);
+        return new UserCompleteDTO(user, cnh);
     }
 
     @Transactional(readOnly = true)
@@ -113,7 +120,8 @@ public class UserService implements UserDetailsService {
     public UserProfileDTO getUserProfile() {
         UserDTO user = this.getLoggedUserDTO();
         Long rateNumber = rateUserService.countRatesByUserId(user.getUuid());
-        return new UserProfileDTO(user, rateNumber);
+        CnhDTO cnh = cnhService.findByUserUuid(user.getUuid());
+        return new UserProfileDTO(user, rateNumber, cnh);
     }
 
     protected UserEntity getLoggedUser() {

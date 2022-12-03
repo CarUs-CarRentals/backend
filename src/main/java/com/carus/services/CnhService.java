@@ -4,6 +4,7 @@ import com.carus.dto.CnhDTO;
 import com.carus.entities.CnhEntity;
 import com.carus.entities.UserEntity;
 import com.carus.repositories.CnhRepository;
+import com.carus.repositories.UserRepository;
 import com.carus.services.exceptions.EntityAlreadyExistsException;
 import com.carus.services.exceptions.EntityNotFoundException;
 import com.carus.services.exceptions.InternalServerErrorException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +27,7 @@ public class CnhService {
     private CnhRepository cnhRepository;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<CnhDTO> findAll() {
@@ -46,6 +48,13 @@ public class CnhService {
         } catch (DataIntegrityViolationException ex) {
             throw new EntityAlreadyExistsException("Entity already exists");
         }
+    }
+
+    public CnhDTO findByUserUuid(String userUuid) {
+        Optional<CnhEntity> cnhOpt = cnhRepository.findByUserUuid(userUuid);
+        if (cnhOpt.isPresent()) return new CnhDTO(cnhOpt.get());
+
+        return null;
     }
 
     @Transactional
@@ -77,7 +86,7 @@ public class CnhService {
     }
 
     private CnhEntity dtoToEntity(CnhDTO dto) {
-        UserEntity user = userService.findEntityByUuid(dto.getUser());
+        UserEntity user = userRepository.findByUuid(dto.getUser()).get();
         CnhEntity entity = new CnhEntity();
         entity.setRg(dto.getRg());
         entity.setUser(user);
