@@ -1,5 +1,6 @@
 package com.carus.dto;
 
+import com.carus.enums.EGender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,9 @@ public class UserProfileDTO implements Serializable {
     private AddressDTO address;
     private CnhDTO cnh;
     private String profileImageUrl;
+    private String cpf;
+    private String phone;
+    private EGender gender;
 
     public UserProfileDTO(UserDTO user, Long rateNumber, CnhDTO cnh) {
         this.firstName = user.getFirstName();
@@ -30,5 +34,8 @@ public class UserProfileDTO implements Serializable {
         this.rateNumber = rateNumber;
         this.profileImageUrl = user.getProfileImageUrl();
         this.cnh = cnh;
+        this.cpf = user.getCpf();
+        this.phone = user.getPhone();
+        this.gender = user.getGender();
     }
 }
