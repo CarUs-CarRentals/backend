@@ -24,6 +24,7 @@ public class UserProfileDTO implements Serializable {
     private String cpf;
     private String phone;
     private EGender gender;
+    private String email;
 
     public UserProfileDTO(UserDTO user, Long rateNumber, CnhDTO cnh) {
         this.firstName = user.getFirstName();
@@ -37,5 +38,6 @@ public class UserProfileDTO implements Serializable {
         this.cpf = user.getCpf();
         this.phone = user.getPhone();
         this.gender = user.getGender();
+        this.email = user.getEmail();
     }
 }
