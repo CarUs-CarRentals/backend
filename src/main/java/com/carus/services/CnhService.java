@@ -86,7 +86,7 @@ public class CnhService {
     }
 
     private CnhEntity dtoToEntity(CnhDTO dto) {
-        UserEntity user = userRepository.findByUuid(dto.getUser()).get();
+        UserEntity user = userRepository.findByUuid(dto.getUserId()).get();
         CnhEntity entity = new CnhEntity();
         entity.setRg(dto.getRg());
         entity.setUser(user);
