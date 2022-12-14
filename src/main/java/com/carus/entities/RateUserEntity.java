@@ -26,7 +26,7 @@ public class RateUserEntity {
     @JoinColumn(name = "rental_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_rental_id"), nullable = false)
     private RentalEntity rental;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
+    @Column(nullable = false, columnDefinition = "DECIMAL(2,1)")
     private Double rate;
 
     @Column(nullable = false, length = 255)

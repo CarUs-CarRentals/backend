@@ -26,13 +26,13 @@ public class RateCarEntity {
     @JoinColumn(name = "rental_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_rental"), nullable = false)
     private RentalEntity rental;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, columnDefinition = "DECIMAL(2,1)")
     private Double rate;
 
     @Column(nullable = false, length = 255)
     private String description;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private LocalDate date;
 
 }
